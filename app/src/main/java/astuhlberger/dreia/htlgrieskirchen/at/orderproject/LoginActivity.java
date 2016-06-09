@@ -2,6 +2,8 @@ package astuhlberger.dreia.htlgrieskirchen.at.orderproject;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 /**
@@ -18,8 +20,6 @@ public class LoginActivity extends Activity{
         setContentView(R.layout.login);
         username = (EditText)findViewById(R.id.input_username);
         password = (EditText)findViewById(R.id.input_password);
-
-
     }
     public void login()
     {
