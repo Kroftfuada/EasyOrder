@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
 
      //Commit by astuhlberger
      //Commit by famayr
-     //Commit by nprechtl1
+     //Commit by nprechtl
      //Commit by DJ Darius Duck
 
 
