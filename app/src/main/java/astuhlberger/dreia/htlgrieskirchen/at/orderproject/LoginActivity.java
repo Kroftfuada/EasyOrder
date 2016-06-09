@@ -11,6 +11,7 @@ public class LoginActivity extends Activity{
 
     EditText username, password;
     String login_username,login_password;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
