@@ -78,7 +78,7 @@ public class SignUpActivity extends Activity {
 
     public boolean checkUsername(String username){
         if (username.isEmpty() || username.length()<5 || !username.matches("[A-Za-z0-9_]+")){
-            //colorizeUserInput
+            input_name.setError("At least 5 characters from A-Z, a-z, 0-9, _");
             return false;
         }
         return true;
@@ -86,16 +86,21 @@ public class SignUpActivity extends Activity {
 
     public boolean checkEmail(String email){
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            //colorizeEmailInput
+            input_email.setError("That is not a correct email-address");
             return false;
         }
         return true;
     }
 
     public boolean checkPassword(String password, String verifyPassword){
-        if (password.isEmpty() || password.length()<5 || !password.matches("[A-Za-z0-9]+") ||
-                !password.equals(verifyPassword)){
-            //colorizePasswordInput
+        if (password.isEmpty() || password.length()<5 || !password.matches("[A-Za-z0-9]+")){
+
+            input_password.setError("At least 5 characters from A-Z, a-z, 0-9");
+            return false;
+
+        }
+        if (!password.equals(verifyPassword)){
+            input_verify_password.setError("Password is not the same");
             return false;
         }
         return true;
