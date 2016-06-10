@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -20,6 +21,7 @@ public class LoginActivity extends Activity{
     EditText username, password;
     String login_username,login_password;
     Button login;
+    TextView signup;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +48,14 @@ public class LoginActivity extends Activity{
                 {
                     Toast.makeText(getApplicationContext(),"Passwort oder Username falsch",Toast.LENGTH_LONG).show();
                 }
+            }
+        });
+        signup = (TextView)findViewById(R.id.link_signup);
+        signup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent goToSignUp = new Intent(getApplicationContext(),SignUpActivity.class);
+                startActivity(goToSignUp);
             }
         });
 

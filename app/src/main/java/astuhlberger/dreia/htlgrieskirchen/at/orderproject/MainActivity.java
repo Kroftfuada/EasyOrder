@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
                     if(snapshot.child("id").child("username").getValue().toString().contains(username) && snapshot.child("id").child("password").getValue().toString().contains(password))
                     {
-                        Toast.makeText(getApplicationContext(),"LOGIN COMPLETE",Toast.LENGTH_LONG).show();;
+                        Toast.makeText(getApplicationContext(),"LOGIN COMPLETE",Toast.LENGTH_LONG).show();
                     }
                 }
 
