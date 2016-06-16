@@ -42,7 +42,7 @@ public class LoginActivity extends Activity{
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra("username",login_username);
                     returnIntent.putExtra("password",login_password);
-                    setResult(Activity.RESULT_OK,returnIntent);
+                    setResult(Activity.RESULT_OK, returnIntent);
                     finish();
                 }
                 else
