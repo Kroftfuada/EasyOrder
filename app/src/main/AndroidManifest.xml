@@ -20,6 +20,8 @@
         </activity>
         <activity android:name=".LoginActivity"/>
         <activity android:name=".SignUpActivity"/>
+        <activity android:name=".VerificationActivity"/>
+        <activity android:name=".AddRestaurantActivity"/>
     </application>
 <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 </manifest>

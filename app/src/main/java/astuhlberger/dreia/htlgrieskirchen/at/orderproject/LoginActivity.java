@@ -50,6 +50,7 @@ public class LoginActivity extends Activity{
                 }
             }
         });
+
         signup = (TextView)findViewById(R.id.link_signup);
         signup.setOnClickListener(new View.OnClickListener() {
             @Override

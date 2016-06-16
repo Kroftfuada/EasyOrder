@@ -28,6 +28,7 @@ public class SignUpActivity extends Activity {
     TextView goToLogin;
     Button btn_signup;
     Firebase dataBase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +106,10 @@ public class SignUpActivity extends Activity {
             referal.child(username);
             referal.child(username).child("password").setValue(pw.toString());
             referal.child(username).child("email").setValue(email);
+
+            Intent i = new Intent(this,VerificationActivity.class);
+            startActivity(i);
+
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
@@ -146,7 +151,7 @@ public class SignUpActivity extends Activity {
         Intent returnIntent = new Intent();
         returnIntent.putExtra("username", username);
         returnIntent.putExtra("email", email);
-        setResult(Activity.RESULT_OK,returnIntent);
+        setResult(Activity.RESULT_OK, returnIntent);
         finish();
 
         return true;
