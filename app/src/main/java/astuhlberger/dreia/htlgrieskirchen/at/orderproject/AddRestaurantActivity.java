@@ -40,6 +40,7 @@ public class AddRestaurantActivity extends Activity
     }
 
     private void showDialogs() {
+        //TODO: Datenbankzugriff
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("Pick Restaurant");
         final LinearLayout dialog = (LinearLayout) getLayoutInflater().inflate(R.layout.listview_new_restaurant, null);
@@ -52,13 +53,13 @@ public class AddRestaurantActivity extends Activity
         });
 
     }
-    private void showRestaurantDialog(final String restaruantname){
+    private void showRestaurantDialog(final String restaurantname){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Make a new group with: "+restaruantname);
+        builder.setMessage("Make a new group with: "+restaurantname);
         builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                createNewGroup(restaruantname);
+                createNewGroup(restaurantname);
             }
         });
         builder.setNegativeButton("Cancel", null);
@@ -99,8 +100,12 @@ public class AddRestaurantActivity extends Activity
     }
 
     private void showGroups() {
+        //TODO: Datenbankzugriff mit den gruppen!
+
     }
 
     private void showBills() {
+        Intent i = new Intent(this,BillActivity.class);
+        startActivity(i);
     }
 }

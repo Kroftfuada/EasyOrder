@@ -23,6 +23,7 @@
         <activity android:name=".VerificationActivity"/>
         <activity android:name=".AddRestaurantActivity"/>
         <activity android:name=".GroupActivity"/>
+        <activity android:name=".BillActivity"/>
     </application>
 <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 </manifest>
