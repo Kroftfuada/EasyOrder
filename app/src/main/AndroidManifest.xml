@@ -24,6 +24,7 @@
         <activity android:name=".AddRestaurantActivity"/>
         <activity android:name=".GroupActivity"/>
         <activity android:name=".BillActivity"/>
+        <activity android:name=".ProductActivity"/>
     </application>
 <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 </manifest>
