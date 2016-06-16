@@ -9,8 +9,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.EditText;
 import android.widget.TextView;
 
 /**
@@ -20,11 +21,14 @@ public class AddRestaurantActivity extends Activity
 {
 
     Button addRestaurant;
+    ListView new_restaurant;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_restaurant);
+
+        new_restaurant = (ListView) findViewById(R.id.listView_new_Restaurant);
 
         addRestaurant= (Button) findViewById(R.id.btn_newRestaurant);
         addRestaurant.setOnClickListener(new View.OnClickListener() {
@@ -36,6 +40,16 @@ public class AddRestaurantActivity extends Activity
     }
 
     private void showDialogs() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Pick Restaurant");
+        final LinearLayout dialog = (LinearLayout) getLayoutInflater().inflate(R.layout.listview_new_restaurant, null);
+        alert.setView(dialog);
+        new_restaurant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showRestaurantDialog(null);
+            }
+        });
 
     }
     private void showRestaurantDialog(final String restaruantname){
