@@ -3,11 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="astuhlberger.dreia.htlgrieskirchen.at.orderproject.MainActivity">
     <item
-        android:id="@+id/action_orders"
-        android:orderInCategory="100"
-        android:title="Show my orders"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_bills"
         android:orderInCategory="100"
         android:title="Show my bills"
