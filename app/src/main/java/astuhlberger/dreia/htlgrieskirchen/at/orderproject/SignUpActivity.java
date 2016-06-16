@@ -3,18 +3,25 @@ package astuhlberger.dreia.htlgrieskirchen.at.orderproject;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.firebase.client.ChildEventListener;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
+import java.util.Iterator;
 
 /**
  * Created by nprechtl on 09.06.2016.
@@ -28,7 +35,7 @@ public class SignUpActivity extends Activity {
     TextView goToLogin;
     Button btn_signup;
     Firebase dataBase;
-
+    boolean usernameANDemailCheckup = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +87,7 @@ public class SignUpActivity extends Activity {
                 allConditionsOkay = checkPassword(password, verifyPassword);
                 if (allConditionsOkay){
                     allConditionsOkay = checkDatabase(username, email);
-                    if (allConditionsOkay){
+                    if (usernameANDemailCheckup == true){
                         signUp(username,email,password);
                     }
                 }
@@ -146,14 +153,39 @@ public class SignUpActivity extends Activity {
         return true;
     }
 
-    public boolean checkDatabase(String username, String email) {
+    public boolean checkDatabase(final String username, final String email) {
 
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra("username", username);
-        returnIntent.putExtra("email", email);
-        setResult(Activity.RESULT_OK, returnIntent);
-        finish();
+        dataBase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
 
+
+                for(int i = 0; i<dataSnapshot.getChildrenCount();i++) {
+                    String snapShotUsername = dataSnapshot.getValue().toString();
+                    if (snapShotUsername.contains(email)) {
+                        usernameANDemailCheckup = false;
+                        Toast.makeText(getApplicationContext(), "Email already exists.", Toast.LENGTH_LONG).show();
+                    }
+                }
+
+
+                if(dataSnapshot.child(username).exists())
+                {
+                    usernameANDemailCheckup = false;
+                    Toast.makeText(getApplicationContext(), "Username already exists.", Toast.LENGTH_LONG).show();
+                }
+                else
+                {
+                    usernameANDemailCheckup = true;
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
         return true;
     }
 }
