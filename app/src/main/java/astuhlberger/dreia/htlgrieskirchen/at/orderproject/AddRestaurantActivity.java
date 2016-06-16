@@ -51,8 +51,8 @@ public class AddRestaurantActivity extends Activity
                 showRestaurantDialog(null);
             }
         });
-
     }
+
     private void showRestaurantDialog(final String restaurantname){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Make a new group with: "+restaurantname);
@@ -100,8 +100,16 @@ public class AddRestaurantActivity extends Activity
     }
 
     private void showGroups() {
-        //TODO: Datenbankzugriff mit den gruppen!
-
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Pick Restaurant");
+        final LinearLayout dialog = (LinearLayout) getLayoutInflater().inflate(R.layout.listview_groups, null);
+        alert.setView(dialog);
+        new_restaurant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showRestaurantDialog(null);
+            }
+        });
     }
 
     private void showBills() {
