@@ -4,19 +4,36 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 /**
  * Created by nprechtl on 16.06.2016.
  */
 public class AddRestaurantActivity extends Activity
-
 {
+
+    Button addRestaurant;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_restaurant);
 
+        addRestaurant= (Button) findViewById(R.id.btn_newRestaurant);
+        addRestaurant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialogs();
+            }
+        });
+    }
 
+    private void showDialogs() {
+
+    }
+    private void showRestaurantDialog(){
+        
     }
 
     @Override
@@ -37,7 +54,6 @@ public class AddRestaurantActivity extends Activity
                 break;
             case R.id.action_logout: logout();
                 break;
-
         }
         return super.onOptionsItemSelected(item);
 
