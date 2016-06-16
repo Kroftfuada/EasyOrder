@@ -39,6 +39,7 @@ public class LoginActivity extends Activity{
 
                 if(login_username != null && login_password != null)
                 {
+                    Log.d("Firebase",login_username);
                     Intent returnIntent = new Intent();
                     returnIntent.putExtra("username",login_username);
                     returnIntent.putExtra("password",login_password);

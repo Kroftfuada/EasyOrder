@@ -67,7 +67,7 @@ public class SignUpActivity extends Activity {
     {
 
         Intent returnIntent = new Intent();
-        setResult(Activity.RESULT_OK,returnIntent);
+        setResult(Activity.RESULT_OK, returnIntent);
         finish();
 
     }
@@ -97,18 +97,8 @@ public class SignUpActivity extends Activity {
 
     public void signUp(String username,String email,String password)
     {
-        byte[] bytesOfMessage = null;
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            try {
-                bytesOfMessage = password.getBytes("UTF-8");
-            }catch (UnsupportedEncodingException c)
-            {
-                Log.d("Firebase",c.toString());
-            }
-            byte[] pw = md.digest(bytesOfMessage);
 
-
+            String pw = md5(password);
             Firebase referal = dataBase.getRoot();
             referal.child(username);
             referal.child(username).child("password").setValue(pw.toString());
@@ -117,10 +107,31 @@ public class SignUpActivity extends Activity {
             Intent i = new Intent(this,VerificationActivity.class);
             startActivity(i);
 
+    }
+
+    public static final String md5(final String s) {
+        final String MD5 = "MD5";
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = java.security.MessageDigest
+                    .getInstance(MD5);
+            digest.update(s.getBytes());
+            byte messageDigest[] = digest.digest();
+
+            // Create Hex String
+            StringBuilder hexString = new StringBuilder();
+            for (byte aMessageDigest : messageDigest) {
+                String h = Integer.toHexString(0xFF & aMessageDigest);
+                while (h.length() < 2)
+                    h = "0" + h;
+                hexString.append(h);
+            }
+            return hexString.toString();
+
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-
+        return "";
     }
 
     public boolean checkUsername(String username){

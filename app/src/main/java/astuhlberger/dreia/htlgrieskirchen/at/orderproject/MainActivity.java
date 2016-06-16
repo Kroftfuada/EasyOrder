@@ -19,46 +19,83 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class MainActivity extends AppCompatActivity {
     Firebase dataBase;
     DataSnapshot snapshot;
     String username, password;
+    String pw;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Firebase.setAndroidContext(this);
         dataBase = new Firebase("https://easyorder.firebaseIO.com");
-
-
-
         //Aufruf der LoginActivity
-        Intent i = new Intent(this,LoginActivity.class);
-        startActivityForResult(i,1);
+        Intent i = new Intent(this, LoginActivity.class);
+        startActivityForResult(i, 1);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == 1)
-        {
+        if (requestCode == 1) {
+            Log.d("Firebase", "ok");
             username = data.getStringExtra("username");
             password = data.getStringExtra("password");
-            Log.d("Firebase",username + password);
 
-            dataBase.addValueEventListener(new ValueEventListener() {
-                public void onDataChange(DataSnapshot snapshot) {
+            pw = md5(password);
 
-                    if(snapshot.child("id").child("username").getValue().toString().contains(username) && snapshot.child("id").child("password").getValue().toString().contains(password))
-                    {
-                        Toast.makeText(getApplicationContext(),"LOGIN COMPLETE",Toast.LENGTH_LONG).show();
+                dataBase.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Log.d("Eingeloggt", "Überprüfung der Daten");
+                        Log.d("Eingeloggt",dataSnapshot.child(username).child("password").getValue().toString() + " _ " +pw);
+                        if (dataSnapshot.child(username).exists() && dataSnapshot.child(username).child("password").getValue().toString().equals(pw)) {
+                            Log.d("Eingeloggt", "Erfolgreich eingeloggt");
+                            Intent intent = new Intent(getApplicationContext(), AddRestaurantActivity.class);
+                            startActivity(intent);
+
+                        }
                     }
-                }
 
-                public void onCancelled(FirebaseError firebaseError) {
-                    System.out.println("The read failed: " + firebaseError.getMessage());
-                }
-            });
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+
+                    }
+                });
+
+                Firebase ref = dataBase.getRoot();
+                ref.child("LogOn").setValue("seas");
+
 
         }
+    }
+    public static final String md5(final String s) {
+        final String MD5 = "MD5";
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = java.security.MessageDigest
+                    .getInstance(MD5);
+            digest.update(s.getBytes());
+            byte messageDigest[] = digest.digest();
+
+            // Create Hex String
+            StringBuilder hexString = new StringBuilder();
+            for (byte aMessageDigest : messageDigest) {
+                String h = Integer.toHexString(0xFF & aMessageDigest);
+                while (h.length() < 2)
+                    h = "0" + h;
+                hexString.append(h);
+            }
+            return hexString.toString();
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }
