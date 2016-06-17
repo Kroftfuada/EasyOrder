@@ -5,15 +5,22 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -25,22 +32,49 @@ public class AddRestaurantActivity extends Activity
 
     Button addRestaurant;
     ArrayList<String> restaurants;
-
+    Firebase dataBase;
     //al für menüpunkt
     ArrayList<Integer> groupid;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_restaurant);
-
+        dataBase = new Firebase("https://easyorderrestaurant.firebaseIO.com/");
         restaurants = new ArrayList<>();
-        //TODO:Arraylist füllen aus Datenbank
+        dataBase.child("logOn").setValue("false");
 
+
+
+        dataBase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                int anz = (int) dataSnapshot.getChildrenCount();
+
+                for (int i = 0; i<(anz-1);i++)
+                {
+                    Log.d("Restaurant","seas");
+                    restaurants.add(dataSnapshot.child("Restaurant"+String.valueOf(i+1)).getValue().toString());
+                    Log.d("Restaurant", dataSnapshot.child("Restaurant1").getValue().toString());
+                    addDataToRestaurants();
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+        //TODO: Text in ArrayList der Restaurants wird in weiß angezeigt
+
+        dataBase.child("logOn").setValue("true");
         groupid = new ArrayList();
         //TODO: arraylist mit gruppen befüllen
+    }
 
+    private void addDataToRestaurants()
+    {
         addRestaurant= (Button) findViewById(R.id.btn_newRestaurant);
         addRestaurant.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,7 +89,11 @@ public class AddRestaurantActivity extends Activity
         alert.setTitle("Pick Restaurant");
         final LinearLayout dialog = (LinearLayout) getLayoutInflater().inflate(R.layout.listview_new_restaurant, null);
         alert.setView(dialog);
+
         ListView new_restaurant = (ListView) dialog.findViewById(R.id.listView_new_Restaurant);
+        ArrayAdapter<String>restaurantAdapter = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1,restaurants);
+        new_restaurant.setAdapter(restaurantAdapter);
+
         new_restaurant.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
