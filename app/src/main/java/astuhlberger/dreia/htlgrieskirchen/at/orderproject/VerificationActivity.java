@@ -3,6 +3,7 @@ package astuhlberger.dreia.htlgrieskirchen.at.orderproject;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,8 +29,13 @@ public class VerificationActivity extends Activity{
         verifycode = (EditText) findViewById(R.id.input_verification);
         verify = (Button) findViewById(R.id.btn_verify);
         code = (TextView)findViewById(R.id.textView_VerificationCode);
-        verificationCode = savedInstanceState.getString("VerificationCode").toString();
-        username = savedInstanceState.getString("Username").toString();
+
+        Intent i = getIntent();
+        Bundle params = i.getExtras();
+
+        verificationCode = params.getString("VerificationCode").toString();
+        username = params.getString("Username").toString();
+
         code.setText(verificationCode);
 
 
@@ -43,6 +49,8 @@ public class VerificationActivity extends Activity{
 
     private void checkCode()
     {
+
+        Log.d("Verification", verificationCode + " " + username);
 
         Firebase referal = dataBase.getRoot();
         referal.child(username).child("registered").setValue("true");

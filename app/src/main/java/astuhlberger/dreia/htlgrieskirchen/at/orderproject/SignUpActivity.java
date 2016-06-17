@@ -88,8 +88,10 @@ public class SignUpActivity extends Activity {
                 allConditionsOkay = checkPassword(password, verifyPassword);
                 if (allConditionsOkay){
                     allConditionsOkay = checkDatabase(username, email);
-                    if (usernameANDemailCheckup == true){
-                        signUp(username,email,password);
+                    if (allConditionsOkay){
+                        if(usernameANDemailCheckup == true) {
+                            signUp(username, email, password);
+                        }
                     }
                 }
             }
@@ -108,6 +110,8 @@ public class SignUpActivity extends Activity {
             referal.child(username).child("verification").setValue(verificationCode);
             referal.child(username).child("registered").setValue("false");
 
+            Log.d("Verification", verificationCode + " " + username);
+
             Intent i = new Intent(this,VerificationActivity.class);
             i.putExtra("VerificationCode",verificationCode);
             i.putExtra("Username",username);
@@ -116,15 +120,8 @@ public class SignUpActivity extends Activity {
     }
 
     public static String random() {
-        Random generator = new Random();
-        StringBuilder randomStringBuilder = new StringBuilder();
-        int randomLength = generator.nextInt(6);
-        char tempChar;
-        for (int i = 0; i < randomLength; i++){
-            tempChar = (char) (generator.nextInt(96) + 32);
-            randomStringBuilder.append(tempChar);
-        }
-        return randomStringBuilder.toString();
+
+        return String.valueOf(Math.random()*200);
     }
 
     public static final String md5(final String s) {
@@ -189,20 +186,22 @@ public class SignUpActivity extends Activity {
             public void onDataChange(DataSnapshot dataSnapshot)
             {
 
-
-                for(int i = 0; i<dataSnapshot.getChildrenCount();i++) {
                     String snapShotUsername = dataSnapshot.getValue().toString();
                     if (snapShotUsername.contains(email)) {
                         usernameANDemailCheckup = false;
-                        Toast.makeText(getApplicationContext(), "Email already exists.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Email already exists.", Toast.LENGTH_SHORT).show();
                     }
-                }
+                    else
+                    {
+                        usernameANDemailCheckup = true;
+                    }
+
 
 
                 if(dataSnapshot.child(username).exists())
                 {
                     usernameANDemailCheckup = false;
-                    Toast.makeText(getApplicationContext(), "Username already exists.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Username already exists.", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
