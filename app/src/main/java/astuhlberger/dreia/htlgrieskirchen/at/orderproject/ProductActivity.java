@@ -66,4 +66,6 @@ public class ProductActivity extends Activity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.activity_list_item, items);
         //TODO: Datenbank
     }
+
+
 }

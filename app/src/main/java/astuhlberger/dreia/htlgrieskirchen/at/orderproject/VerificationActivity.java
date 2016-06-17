@@ -1,6 +1,7 @@
 package astuhlberger.dreia.htlgrieskirchen.at.orderproject;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -45,7 +46,11 @@ public class VerificationActivity extends Activity{
 
         Firebase referal = dataBase.getRoot();
         referal.child(username).child("registered").setValue("true");
+        if(verificationCode.equals(verifycode.getText().toString()))
+        {
+            Intent i = new Intent(this, AddRestaurantActivity.class);
+            startActivity(i);
+        }
 
-        verificationCode.equals(verifycode.getText().toString());
     }
 }
