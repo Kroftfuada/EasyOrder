@@ -5,18 +5,23 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="70dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Amount:"
         android:id="@+id/textView"
         android:textSize="30dp"
         android:textStyle="bold"
+        android:paddingTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_gravity="center_horizontal"
         android:layout_weight="1"
-        android:gravity="center"
-        android:layout_gravity="center_horizontal"/>
+        android:gravity="center" />
 
     <NumberPicker
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:id="@+id/numberPicker" />
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_height="70dp"
+        android:id="@+id/numberPicker"
+        android:layout_weight="1" />
 </LinearLayout>

@@ -23,21 +23,17 @@ import java.util.HashMap;
  */
 public class ProductActivity extends Activity {
     ListView billList;
-    Context context;
-    View view;
     HashMap<String, Integer> product;
     ArrayList<String> items = new ArrayList<String>();
 
-    //TODO: Layout für Dialog und Activity
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.product_activity);
-
-
-        displayItems();
-
+                displayItems();
+        billList = (ListView) findViewById(R.id.listView_productlist);
 
         billList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -68,5 +64,6 @@ public class ProductActivity extends Activity {
 
     private void displayItems(){
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.activity_list_item, items);
+        //TODO: Datenbank
     }
 }
