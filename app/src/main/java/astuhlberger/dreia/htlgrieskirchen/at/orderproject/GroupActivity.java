@@ -60,8 +60,14 @@ public class GroupActivity extends Activity {
         //TODO: Listview mit usern befüllen
         //TODO: addproducts
         //TODO: addUser
-        //TODO: showOrder
         //TODO: leave
+
+        btnShowOrders.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showOrderDialog();
+            }
+        });
 
         btnAddProducts.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,6 +101,14 @@ public class GroupActivity extends Activity {
 
             }
         });
+
+    }
+
+    private void showOrderDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        //TODO: Listview einfügen und mit daten aus bestellung füllen
+        builder.setNegativeButton("OK", null);
+        builder.show();
 
     }
 
