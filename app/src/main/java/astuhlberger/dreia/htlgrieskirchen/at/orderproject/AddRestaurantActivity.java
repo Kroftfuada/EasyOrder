@@ -106,8 +106,7 @@ public class AddRestaurantActivity extends Activity
 
     private void logout() {
         //TODO: username aus den konstanten werfen
-        Intent i = new Intent(this,LoginActivity.class);
-        startActivity(i);
+        System.exit(0);
     }
 
     private void showGroups() {
