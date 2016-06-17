@@ -62,6 +62,7 @@ public class AddRestaurantActivity extends Activity
                 showRestaurantDialog(restaurants.get(position));
             }
         });
+        alert.show();
     }
 
     private void showRestaurantDialog(final String restaurantname){
@@ -122,6 +123,7 @@ public class AddRestaurantActivity extends Activity
                 openGroupActivity(position);
             }
         });
+        alert.show();
     }
 
     private void openGroupActivity(int position) {
