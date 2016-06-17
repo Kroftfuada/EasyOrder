@@ -14,13 +14,23 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="An Verification-Code was sent to your Email-Address"
+        android:text="Please insert your verification Code"
         android:id="@+id/textView_Verification"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:gravity="center"/>
+    <!-- Verification Code-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Verification Code"
+        android:id="@+id/textView_VerificationCode"
         android:textSize="20dp"
         android:textStyle="bold"
         android:gravity="center"/>
 
     <!-- Enter Verification Label -->
+
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
