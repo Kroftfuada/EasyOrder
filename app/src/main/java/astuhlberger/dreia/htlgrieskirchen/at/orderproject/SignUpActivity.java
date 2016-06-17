@@ -22,6 +22,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Random;
 
 /**
  * Created by nprechtl on 09.06.2016.
@@ -99,14 +100,31 @@ public class SignUpActivity extends Activity {
     {
 
             String pw = md5(password);
+            String verificationCode = random();
             Firebase referal = dataBase.getRoot();
             referal.child(username);
             referal.child(username).child("password").setValue(pw.toString());
             referal.child(username).child("email").setValue(email);
+            referal.child(username).child("verification").setValue(verificationCode);
+            referal.child(username).child("registered").setValue("false");
 
             Intent i = new Intent(this,VerificationActivity.class);
+            i.putExtra("VerificationCode",verificationCode);
+            i.putExtra("Username",username);
             startActivity(i);
 
+    }
+
+    public static String random() {
+        Random generator = new Random();
+        StringBuilder randomStringBuilder = new StringBuilder();
+        int randomLength = generator.nextInt(6);
+        char tempChar;
+        for (int i = 0; i < randomLength; i++){
+            tempChar = (char) (generator.nextInt(96) + 32);
+            randomStringBuilder.append(tempChar);
+        }
+        return randomStringBuilder.toString();
     }
 
     public static final String md5(final String s) {

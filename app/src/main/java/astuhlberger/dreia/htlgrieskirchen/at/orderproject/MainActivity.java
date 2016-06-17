@@ -55,10 +55,19 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("Eingeloggt", "Überprüfung der Daten");
                         Log.d("Eingeloggt",dataSnapshot.child(username).child("password").getValue().toString() + " _ " +pw);
                         if (dataSnapshot.child(username).exists() && dataSnapshot.child(username).child("password").getValue().toString().equals(pw)) {
-                            Log.d("Eingeloggt", "Erfolgreich eingeloggt");
-                            Intent intent = new Intent(getApplicationContext(), AddRestaurantActivity.class);
-                            startActivity(intent);
+                            if(dataSnapshot.child(username).child("registered").getValue().toString().equals("true")) {
+                                Log.d("Eingeloggt", "Erfolgreich eingeloggt");
 
+                                Intent intent = new Intent(getApplicationContext(), AddRestaurantActivity.class);
+                                startActivity(intent);
+                            }
+                            else
+                            {
+                                Intent i = new Intent(getApplicationContext(),VerificationActivity.class);
+                                i.putExtra("VerificationCode",dataSnapshot.child(username).child("verification").getValue().toString());
+                                i.putExtra("Username",username);
+                                startActivity(i);
+                            }
                         }
                     }
 
