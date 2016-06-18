@@ -22,20 +22,28 @@ import java.util.HashMap;
  * Created by Marcus on 16.06.2016.
  */
 public class ProductActivity extends Activity {
-    ListView billList;
+    ListView productList;
     HashMap<String, Integer> product;
     ArrayList<String> items = new ArrayList<String>();
-
+    ProductAdapter pa;
+    String productname;
+    String price;
+    String amount = "0";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.product_activity);
-                displayItems();
-        billList = (ListView) findViewById(R.id.listView_productlist);
 
-        billList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        productList = (ListView) findViewById(R.id.listView_productlist);
+
+        //TODO: werte aus datenbank holen für productname und price
+
+        pa = new ProductAdapter(this,items,productname,price,amount);
+        productList.setAdapter(pa);
+
+        productList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 showDialogs(items.get(position));
@@ -60,12 +68,5 @@ public class ProductActivity extends Activity {
         builder.setNegativeButton("Cancel", null);
         builder.show();
     }
-
-
-    private void displayItems(){
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.activity_list_item, items);
-        //TODO: Datenbank
-    }
-
 
 }
