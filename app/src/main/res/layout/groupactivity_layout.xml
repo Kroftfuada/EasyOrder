@@ -25,26 +25,34 @@
                 android:hint="Add by Username" />
         </android.support.design.widget.TextInputLayout>
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Add"
-            android:id="@+id/btn_addUser"
-            android:layout_weight="1" />
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Stop"
-            android:id="@+id/btn_StopOrders"
-            android:layout_weight="1" />
     </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add"
+        android:id="@+id/btn_addUser"
+        android:layout_weight="1" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stop"
+        android:id="@+id/btn_StopOrders"
+        android:layout_weight="1"
+        android:layout_gravity="center_horizontal" />
+
+        </LinearLayout>
 
     <ListView
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:id="@+id/listViewGroupActivity"
-        android:layout_weight="1" />
+        android:layout_height="265dp"
+        android:id="@+id/listViewGroupActivity" />
 
     <LinearLayout
         android:orientation="horizontal"
