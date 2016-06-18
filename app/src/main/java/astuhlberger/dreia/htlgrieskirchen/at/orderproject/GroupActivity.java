@@ -8,11 +8,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -32,8 +38,12 @@ public class GroupActivity extends Activity {
     Button btnShowMap;
     Button btnLeave;
     Button btnShowOrders;
-    String restaurantname = "Mc Donalds";
-
+    String restaurantname;
+    EditText usernameToAdd;
+    Firebase dataBaseUsers;
+    ArrayList<String>usersInGroup;
+    ListView groupUsers;
+    ArrayAdapter<String> restaurantAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +51,7 @@ public class GroupActivity extends Activity {
 
         groupid = new ArrayList();
         //TODO: arraylist mit gruppen befüllen
-
+        usersInGroup = new ArrayList<>();
         groupList = (ListView) findViewById(R.id.listView_groups);
         textAddUser = (EditText) findViewById(R.id.input_addUser);
         btnAddProducts = (Button) findViewById(R.id.btn_addProducts);
@@ -50,6 +60,9 @@ public class GroupActivity extends Activity {
         btnShowMap = (Button) findViewById(R.id.btn_showMap);
         btnLeave = (Button) findViewById(R.id.btn_leaveGroup);
         btnShowOrders = (Button) findViewById(R.id.btn_showOrder);
+        usernameToAdd = (EditText)findViewById(R.id.input_addUser);
+        dataBaseUsers = new Firebase("https://easyorder.firebaseIO.com");
+        groupUsers = (ListView) findViewById(R.id.listViewGroupActivity);
 
         Intent intent = getIntent();
         Bundle params = intent.getExtras();
@@ -61,6 +74,13 @@ public class GroupActivity extends Activity {
         //TODO: addproducts
         //TODO: addUser
         //TODO: leave
+
+        btnAddUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addUserToListView();
+            }
+        });
 
         btnShowOrders.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,6 +122,38 @@ public class GroupActivity extends Activity {
             }
         });
 
+    }
+
+    private void addUserToListView()
+    {
+        dataBaseUsers.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot)
+            {
+
+                String snapShotUsername = dataSnapshot.getValue().toString();
+                if(usernameToAdd.getText().toString()!=null)
+                {
+                    if(dataSnapshot.child(usernameToAdd.getText().toString()).exists()&& !usersInGroup.contains(usernameToAdd.getText().toString()))
+                    {
+                        usersInGroup.add(usernameToAdd.getText().toString());
+                        restaurantAdapter = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1,usersInGroup);
+                        groupUsers.setAdapter(restaurantAdapter);
+                    }
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(),"Pls insert a valid username",Toast.LENGTH_SHORT).show();
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
     }
 
     private void showOrderDialog() {
