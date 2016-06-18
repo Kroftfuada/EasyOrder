@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,10 +41,14 @@ public class GroupActivity extends Activity {
     Button btnShowOrders;
     String restaurantname;
     EditText usernameToAdd;
-    Firebase dataBaseUsers;
+    Firebase dataBaseUsers,dataBaseGroups;
     ArrayList<String>usersInGroup;
     ListView groupUsers;
     ArrayAdapter<String> restaurantAdapter;
+    String adminname;
+    int anz,anztrue;
+    int counterForGroup = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,11 +68,12 @@ public class GroupActivity extends Activity {
         usernameToAdd = (EditText)findViewById(R.id.input_addUser);
         dataBaseUsers = new Firebase("https://easyorder.firebaseIO.com");
         groupUsers = (ListView) findViewById(R.id.listViewGroupActivity);
-
+        dataBaseGroups = new Firebase("https://easyordergroups.firebaseio.com/");
         Intent intent = getIntent();
         Bundle params = intent.getExtras();
         if (params!=null){
             restaurantname = params.getString("name");
+            adminname = params.getString("username").toString();
         }
 
         //TODO: Listview mit usern befüllen
@@ -97,20 +103,11 @@ public class GroupActivity extends Activity {
             }
         });
 
-        btnStopOrders.setOnClickListener(new View.OnClickListener() {
+        btnStopOrders.setOnClickListener(
+                new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                //TODO: bei abfrage ob der user gruppenadmin ist
-                if(true) {
-                    if(btnAddProducts.isClickable()){
-                        btnAddProducts.setClickable(false);
-                    }else{
-                        btnAddProducts.setClickable(true);
-                    }
-                }else{
-                    Toast.makeText(getApplicationContext(), "Only the admin can stop orders", Toast.LENGTH_SHORT).show();
-                }
+                usersToFirebase();
             }
         });
 
@@ -121,6 +118,48 @@ public class GroupActivity extends Activity {
 
             }
         });
+
+    }
+
+    private void usersToFirebase()
+    {
+        dataBaseGroups.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                int anz = (int) dataSnapshot.getChildrenCount();
+                int anztrue = anz + 1;
+
+                if (counterForGroup == 0) {
+                    dataBaseGroups.child(String.valueOf(anztrue)).child("Admin").setValue(adminname);
+
+                    String members = "";
+                    for (int i = 0; i < usersInGroup.size(); i++) {
+                        if (i < (usersInGroup.size() - 1)) {
+                            members += (usersInGroup.get(i).toString() + ",");
+                        } else {
+                            members += (usersInGroup.get(i).toString());
+                        }
+                    }
+
+                    dataBaseGroups.child(String.valueOf(anztrue)).child("Member").setValue(members);
+                    dataBaseGroups.child(String.valueOf(anztrue)).child("Restaurant").setValue(restaurantname);
+                    counterForGroup++;
+                    Toast.makeText(getApplicationContext(),"The Group has been made. Please go to insert your wished products now.",Toast.LENGTH_LONG);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+
+
+
+
 
     }
 

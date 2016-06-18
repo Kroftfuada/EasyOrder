@@ -51,8 +51,10 @@ public class ProductAdapter extends BaseAdapter{
         return 0;
     }
 
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        /*
         View rowView = layoutInflater.inflate(R.layout.product_adapter,null);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.imageView);
         Picasso.with(context).load(SIZE+arrayListImages.get(position)).into(imageView);
@@ -63,7 +65,13 @@ public class ProductAdapter extends BaseAdapter{
         amount.setText(amounts.get(position));
         price.setText(prices.get(position));
         return rowView;
+        */
+
+
+        View v = layoutInflater.inflate(R.layout.add_restaurant,null);
+        return v;
 
     }
+
 }
 

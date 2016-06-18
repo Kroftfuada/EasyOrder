@@ -35,6 +35,7 @@ public class AddRestaurantActivity extends Activity
     Firebase dataBase;
     //al für menüpunkt
     ArrayList<Integer> groupid;
+    String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,12 @@ public class AddRestaurantActivity extends Activity
         restaurants = new ArrayList<>();
         dataBase.child("logOn").setValue("false");
 
+        Intent i = getIntent();
+        Bundle b = i.getExtras();
+        if(b!=null)
+        {
+            username = b.get("username").toString();
+        }
 
 
         dataBase.addValueEventListener(new ValueEventListener() {
@@ -52,10 +59,9 @@ public class AddRestaurantActivity extends Activity
 
                 int anz = (int) dataSnapshot.getChildrenCount();
 
-                for (int i = 0; i<(anz-1);i++)
-                {
-                    Log.d("Restaurant","seas");
-                    restaurants.add(dataSnapshot.child("Restaurant"+String.valueOf(i+1)).getValue().toString());
+                for (int i = 0; i < (anz - 1); i++) {
+                    Log.d("Restaurant", "seas");
+                    restaurants.add(dataSnapshot.child("Restaurant" + String.valueOf(i + 1)).getValue().toString());
                     Log.d("Restaurant", dataSnapshot.child("Restaurant1").getValue().toString());
                     addDataToRestaurants();
                 }
@@ -119,6 +125,7 @@ public class AddRestaurantActivity extends Activity
     private void createNewGroup(String restaruantname) {
         Intent i = new Intent(this, GroupActivity.class);
         i.putExtra("name", restaruantname);
+        i.putExtra("username",username);
         startActivity(i);
     }
 

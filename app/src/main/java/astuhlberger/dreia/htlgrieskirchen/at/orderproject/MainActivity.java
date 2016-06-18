@@ -58,7 +58,9 @@ public class MainActivity extends AppCompatActivity {
                             if(dataSnapshot.child(username).child("registered").getValue().toString().equals("true")) {
                                 Log.d("Eingeloggt", "Erfolgreich eingeloggt");
 
+
                                 Intent intent = new Intent(getApplicationContext(), AddRestaurantActivity.class);
+                                intent.putExtra("username",username);
                                 startActivity(intent);
                             }
                             else
