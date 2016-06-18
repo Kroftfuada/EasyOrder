@@ -21,14 +21,29 @@ public class BillActivity extends Activity {
 
     //al für menüpunkt
     ArrayList<Integer> groupid;
+    ArrayList<String> dates;
+    ArrayList<String> restnames;
+    ArrayList<String> prices;
+    BillAdapter ba;
+    ListView billList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //TODO: layout
+        setContentView(R.layout.bill_activity_layout);
+
+        billList = (ListView) findViewById(R.id.listView_bill);
 
         groupid = new ArrayList();
-        //TODO: arraylist mit gruppen befüllen
+        //TODO: menupoint groupid befüllen mit gruppen
+
+        dates = new ArrayList<>();
+        restnames = new ArrayList<>();
+        prices = new ArrayList<>();
+        //TODO: arraylisten mit gruppendatenbank befüllen
+
+        ba = new BillAdapter(this,dates,restnames,prices);
+        billList.setAdapter(ba);
     }
 
     @Override

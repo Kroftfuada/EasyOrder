@@ -21,11 +21,11 @@ public class ProductAdapter extends BaseAdapter{
     ArrayList<String> arrayListImages = null;
     LayoutInflater layoutInflater;
     Context context;
-    String productname;
-    String prices;
-    String amounts;
+    ArrayList<String> productname;
+    ArrayList<String> prices;
+    ArrayList<String> amounts;
 
-    public ProductAdapter(Context context, ArrayList<String> URLList, String productname, String price, String amount) {
+    public ProductAdapter(Context context, ArrayList<String> URLList, ArrayList<String> productname, ArrayList<String> price, ArrayList<String> amount) {
         this.arrayListImages = URLList;
         this.context = context;
         this.productname =productname;
@@ -38,12 +38,12 @@ public class ProductAdapter extends BaseAdapter{
 
     @Override
     public int getCount() {
-        return arrayListImages.size();
+        return productname.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return arrayListImages.get(position);
+        return productname.get(position);
     }
 
     @Override
@@ -59,9 +59,9 @@ public class ProductAdapter extends BaseAdapter{
         TextView name = (TextView) rowView.findViewById(R.id.textView_ProductName);
         TextView amount = (TextView) rowView.findViewById(R.id.textView_Amount);
         TextView price = (TextView) rowView.findViewById(R.id.textView_Price);
-        name.setText(productname);
-        amount.setText(amounts);
-        price.setText(prices);
+        name.setText(productname.get(position));
+        amount.setText(amounts.get(position));
+        price.setText(prices.get(position));
         return rowView;
 
     }

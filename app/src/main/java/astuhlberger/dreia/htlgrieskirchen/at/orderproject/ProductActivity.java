@@ -26,9 +26,9 @@ public class ProductActivity extends Activity {
     HashMap<String, Integer> product;
     ArrayList<String> items = new ArrayList<String>();
     ProductAdapter pa;
-    String productname;
-    String price;
-    String amount = "0";
+    ArrayList<String> productname;
+    ArrayList<String> price;
+    ArrayList<String> amount;
 
 
     @Override
@@ -38,7 +38,7 @@ public class ProductActivity extends Activity {
 
         productList = (ListView) findViewById(R.id.listView_productlist);
 
-        //TODO: werte aus datenbank holen für productname und price
+        //TODO: werte aus datenbank holen für productname und price und mit amount dann noch weiterverarbeiten durch anderen dialog
 
         pa = new ProductAdapter(this,items,productname,price,amount);
         productList.setAdapter(pa);
@@ -69,4 +69,10 @@ public class ProductActivity extends Activity {
         builder.show();
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        //TODO: map zurückliefern an intentforresult
+    }
 }
