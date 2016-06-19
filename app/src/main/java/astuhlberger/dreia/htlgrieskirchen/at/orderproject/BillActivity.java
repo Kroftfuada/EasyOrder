@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -29,9 +30,10 @@ import java.util.ArrayList;
 public class BillActivity extends Activity {
 
     //al für menüpunkt
-    ArrayList<Integer> groupid;
+    ArrayList<String> groupid;
 
     Firebase dataBase;
+    Firebase groupBase;
     ArrayList<String> dates;
     ArrayList<String> restnames;
     ArrayList<String> prices;
@@ -45,11 +47,13 @@ public class BillActivity extends Activity {
 
         Firebase.setAndroidContext(this);
         dataBase = new Firebase("https://easyorderbills.firebaseio.com");
-
+        groupBase = new Firebase("https://easyordergroups.firebaseio.com");
         billList = (ListView) findViewById(R.id.listView_bill);
 
         groupid = new ArrayList();
         //TODO: menupoint groupid befüllen mit gruppen
+
+        fillMenuGroup();
 
         dates = new ArrayList<>();
         restnames = new ArrayList<>();
@@ -64,6 +68,47 @@ public class BillActivity extends Activity {
 
     }
 
+    private void fillMenuGroup() {
+
+        groupBase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                long anz = dataSnapshot.getChildrenCount();
+
+                for (int i = 0; i<anz; i++){
+
+                    boolean userInGroup = false;
+
+                    String admin = (String) dataSnapshot.child(String.valueOf((i+1))).child("Admin").getValue();
+                    //TODO: Aus konstanten usernamen hollen und statt diesen usernamen ersetzen
+                    if (admin.equals("Username")){
+                        userInGroup = true;
+                    }
+                    if (userInGroup==false){
+                        String members = (String) dataSnapshot.child(String.valueOf((i+1))).child("Member").getValue();
+                        String member[] = members.split(",");
+                        int count = member.length;
+                        for (int j = 0; j<count; j++){
+                            if (userInGroup==false && member[j].equals("Username")){
+                                userInGroup = true;
+                            }
+                        }
+                    }
+                    if (userInGroup){
+                        String restaurant = (String) dataSnapshot.child(String.valueOf((i+1))).child("Restaurant").getValue();
+                        String group = "Group -"+(i+1)+"-, "+restaurant+", Admin: "+ admin;
+                        groupid.add(group);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+
     private void fillBillLists() {
 
         dataBase.addValueEventListener(new ValueEventListener() {
@@ -71,7 +116,7 @@ public class BillActivity extends Activity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
 
-                //TODO: Aus Konstanten den usernamen holen und statt id einsetzen
+                //TODO: Aus Konstanten den usernamen holen und statt diesen usernamen einsetzen
                 if (dataSnapshot.child("Username").exists()){
                     int anz = (int) dataSnapshot.child("Username").getChildrenCount();
                     for (int i = 0; i<anz; i++) {
@@ -132,6 +177,8 @@ public class BillActivity extends Activity {
         final LinearLayout dialog = (LinearLayout) getLayoutInflater().inflate(R.layout.listview_groups, null);
         alert.setView(dialog);
         ListView group = (ListView) dialog.findViewById(R.id.listView_groups);
+        ArrayAdapter<String> groupad = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1,groupid);
+        group.setAdapter(groupad);
         group.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -141,7 +188,9 @@ public class BillActivity extends Activity {
     }
 
     private void openGroupActivity(int position) {
-        groupid.get(position);
+        String group = groupid.get(position);
+        String[] idString = group.split("-");
+        int id = Integer.parseInt(idString[1]);
         //TODO: restaurantname etc holen aus db und intent an group activity machen!
     }
 }
