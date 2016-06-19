@@ -34,7 +34,7 @@ public class AddRestaurantActivity extends Activity
     ArrayList<String> restaurants;
     Firebase dataBase;
     Firebase groupBase;
-    //al für menüpunkt
+    //al für  menüpunkt
     ArrayList<String> groupid;
     String username;
 
