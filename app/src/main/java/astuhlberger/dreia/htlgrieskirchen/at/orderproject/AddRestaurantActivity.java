@@ -81,7 +81,7 @@ public class AddRestaurantActivity extends Activity
 
     private void addDataToRestaurants()
     {
-        addRestaurant= (Button) findViewById(R.id.btn_newRestaurant);
+        addRestaurant = (Button) findViewById(R.id.btn_newRestaurant);
         addRestaurant.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -173,6 +173,8 @@ public class AddRestaurantActivity extends Activity
 
     private void openGroupActivity(int position) {
         groupid.get(position);
+        Intent intent = new Intent(this, GroupActivity.class);
+        startActivity(intent);
         //TODO: restaurantname etc holen aus db und intent an group activity machen!
     }
 
