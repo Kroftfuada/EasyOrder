@@ -30,7 +30,6 @@ public class GroupActivity extends Activity {
 
     //al für menüpunkt
     ArrayList<Integer> groupid;
-
     ListView groupList;
     EditText textAddUser;
     Button btnAddUser;
@@ -56,6 +55,7 @@ public class GroupActivity extends Activity {
         Firebase.setAndroidContext(this);
         groupid = new ArrayList();
         //TODO: arraylist mit gruppen befüllen
+
         usersInGroup = new ArrayList<>();
         groupList = (ListView) findViewById(R.id.listView_groups);
         textAddUser = (EditText) findViewById(R.id.input_addUser);
@@ -66,9 +66,11 @@ public class GroupActivity extends Activity {
         btnLeave = (Button) findViewById(R.id.btn_leaveGroup);
         btnShowOrders = (Button) findViewById(R.id.btn_showOrder);
         usernameToAdd = (EditText)findViewById(R.id.input_addUser);
-        dataBaseUsers = new Firebase("https://easyorder.firebaseIO.com");
         groupUsers = (ListView) findViewById(R.id.listViewGroupActivity);
+
+        dataBaseUsers = new Firebase("https://easyorder.firebaseIO.com");
         dataBaseGroups = new Firebase("https://easyordergroups.firebaseio.com/");
+
         Intent intent = getIntent();
         Bundle params = intent.getExtras();
         if (params!=null){
@@ -184,8 +186,6 @@ public class GroupActivity extends Activity {
                 {
                     Toast.makeText(getApplicationContext(),"Pls insert a valid username",Toast.LENGTH_SHORT).show();
                 }
-
-
             }
 
             @Override

@@ -26,6 +26,7 @@
         <activity android:name=".BillActivity"/>
         <activity android:name=".ProductActivity"/>
         <activity android:name=".MapFragmentActivity"/>
+        <activity android:name=".AddProducts"/>
     </application>
 <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 </manifest>
