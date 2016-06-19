@@ -54,7 +54,7 @@ public class AddRestaurantActivity extends Activity
             username = b.get("username").toString();
         }
 
-        fillMenuGroup();
+
 
         dataBase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -79,7 +79,7 @@ public class AddRestaurantActivity extends Activity
 
         dataBase.child("logOn").setValue("true");
         groupid = new ArrayList();
-        //TODO: arraylist mit gruppen befüllen
+        fillMenuGroup();
     }
 
     private void addDataToRestaurants()

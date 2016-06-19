@@ -57,7 +57,7 @@ public class GroupActivity extends Activity {
         setContentView(R.layout.groupactivity_layout);
         Firebase.setAndroidContext(this);
         groupid = new ArrayList();
-        //TODO: arraylist mit gruppen befüllen
+
         groupBase = new Firebase("https://easyordergroups.firebaseio.com");
         usersInGroup = new ArrayList<>();
         groupList = (ListView) findViewById(R.id.listView_groups);
