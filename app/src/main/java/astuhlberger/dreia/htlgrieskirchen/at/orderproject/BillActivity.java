@@ -21,7 +21,7 @@ import com.firebase.client.ValueEventListener;
 import java.util.ArrayList;
 
 /**
- * Created by nprechtl on 16.06.2016.
+ *  Created by nprechtl on 16.06.2016.
  */
 
 //TODO: Layout anzeigen lassen
