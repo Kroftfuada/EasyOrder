@@ -53,7 +53,7 @@ public class GroupActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.groupactivity_layout);
-
+        Firebase.setAndroidContext(this);
         groupid = new ArrayList();
         //TODO: arraylist mit gruppen befüllen
         usersInGroup = new ArrayList<>();

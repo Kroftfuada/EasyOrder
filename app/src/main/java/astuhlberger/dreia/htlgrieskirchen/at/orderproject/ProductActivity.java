@@ -73,6 +73,6 @@ public class ProductActivity extends Activity {
     protected void onStop() {
         super.onStop();
 
-        //TODO: map zurückliefern an intentforresult
+        //TODO: hashmap zurückliefern an intentforresult
     }
 }
