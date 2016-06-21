@@ -251,6 +251,7 @@ public class GroupActivity extends Activity {
 
     private void showProductActivity() {
         Intent i = new Intent(this, ProductActivity.class);
+        i.putExtra("name",restaurantname);
         startActivityForResult(i, 1);
     }
 
