@@ -227,6 +227,7 @@ public class BillActivity extends Activity {
             }
         });
         Intent i = new Intent(this, GroupActivity.class);
+        i.putExtra("MenuId",id);
         i.putExtra("MenuRestaurant",menurestaurant);
         i.putExtra("MenuAdmin",menuadmin);
         i.putExtra("MenuMember",menumember);

@@ -22,6 +22,7 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by nprechtl on 16.06.2016.
@@ -37,8 +38,12 @@ public class GroupActivity extends Activity {
     String menuprice;
     int id;
 
+    String intentProducts;
+    String intentPrice;
+
     Firebase groupBase;
 
+    HashMap<String,Integer> prodctmap;
     ListView groupList;
     EditText textAddUser;
     Button btnAddUser;
@@ -67,9 +72,10 @@ public class GroupActivity extends Activity {
         Firebase.setAndroidContext(this);
         groupid = new ArrayList();
         itemsToOrder = new ArrayList();
-
+        prodctmap = new HashMap<>();
         groupBase = new Firebase("https://easyordergroups.firebaseio.com");
         usersInGroup = new ArrayList<>();
+        intentMethod();
         groupList = (ListView) findViewById(R.id.listView_groups);
         textAddUser = (EditText) findViewById(R.id.input_addUser);
         btnAddProducts = (Button) findViewById(R.id.btn_addProducts);
@@ -90,13 +96,11 @@ public class GroupActivity extends Activity {
             adminname = params.getString("username").toString();
         }
 
-        //TODO: Listview mit usern befüllen
-        //TODO: addproducts
-        //TODO: addUser
-        //TODO: leave
-        //TODO: Intent behandlung wenn man auf den Menüpunkt show Groups drückt
 
-        fillMenuGroup();
+        //TODO: leave
+
+
+
 
         btnAddUser.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,6 +140,37 @@ public class GroupActivity extends Activity {
             }
         });
 
+    }
+
+    private void intentMethod() {
+
+        Intent i = getIntent();
+        Bundle params = i.getExtras();
+        if (params!=null){
+            restaurantname = params.getString("MenuRestaurant");
+            counterForGroup = params.getInt("MenuId");
+            adminname = params.getString("MenuAdmin");
+            String member = params.getString("MenuMember");
+            String[] members = member.split(",");
+            for (int k = 0; k<members.length; k++){
+                usersInGroup.add(members[k]);
+            }
+            //TODO: die beiden unteren werte sind aus grouporders und gehören hineingerechnet.
+            intentProducts = params.getString("MenuProducts");
+            intentPrice = params.getString("MenuPrice");
+
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode==1){
+           Bundle params = data.getExtras();
+            if (params!=null){
+                prodctmap = (HashMap<String, Integer>) params.get("List");
+                //TODO: prodctmap hinzufügen zu den bisherigen gruppenbestellungen mit preis, welcher noch ausgerechnet werden muss.
+            }
+        }
     }
 
     private void usersToFirebase()
@@ -343,6 +378,7 @@ public class GroupActivity extends Activity {
         i.putExtra("MenuMember",menumember);
         i.putExtra("MenuProducts",menuproducts);
         i.putExtra("MenuPrice",menuprice);
+        i.putExtra("MenuId",id);
         startActivity(i);
     }
 
