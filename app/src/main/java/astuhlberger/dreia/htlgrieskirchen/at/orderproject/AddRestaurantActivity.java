@@ -222,6 +222,7 @@ public class AddRestaurantActivity extends Activity
         i.putExtra("MenuAdmin",menuadmin);
         i.putExtra("MenuMember",menumember);
         i.putExtra("MenuProducts",menuproducts);
+        i.putExtra("MenuId",id);
         i.putExtra("MenuPrice",menuprice);
         startActivity(i);
     }

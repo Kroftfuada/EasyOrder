@@ -23,6 +23,8 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -43,6 +45,7 @@ public class ProductActivity extends Activity {
     Button order, cancel;
     String restaurantname;
     Firebase productBase;
+    Firebase billBase;
     String itemBase;
     String productnameBase;
     String priceBase;
@@ -64,6 +67,7 @@ public class ProductActivity extends Activity {
 
         productList = (ListView) findViewById(R.id.listView_productlist);
         productBase = new Firebase("https://easyorderproducts.firebaseio.com");
+        billBase = new Firebase("https://easyorderbills.firebaseio.com");
 
         productname=new ArrayList<String>();
         price=new ArrayList<String>();
@@ -87,7 +91,12 @@ public class ProductActivity extends Activity {
         order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: hashmap zurückliefern an intentforresult und die bestellung in die user bills datenbank werfen
+
+                setBillsFirebase();
+                Intent i = new Intent();
+                i.putExtra("List",product);
+                setResult(Activity.RESULT_OK, i);
+                finish();
             }
         });
 
@@ -95,6 +104,32 @@ public class ProductActivity extends Activity {
             @Override
             public void onClick(View v) {
                 //TODO: Activity schließen und wieder auf group activity zurückkehren
+            }
+        });
+    }
+
+    private void setBillsFirebase() {
+        //TODO: username mit konstate ersetzten
+        billBase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int anz = (int) dataSnapshot.child("Username").getChildrenCount();
+                int anztrue = anz+1;
+
+                billBase.child("Username").child(String.valueOf(anztrue)).child("Restaurant").setValue(restaurantname);
+                Calendar cal = Calendar.getInstance();
+                Date date = cal.getTime();
+                billBase.child("Username").child(String.valueOf(anztrue)).child("Date").setValue(date);
+                int billprice =0;
+                for (int i = 0; i < amount.size();i++){
+                    billprice+=Integer.parseInt(amount.get(i))*Integer.parseInt(price.get(i));
+                }
+                billBase.child("Username").child(String.valueOf(anztrue)).child("Price").setValue(billprice);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
             }
         });
     }
