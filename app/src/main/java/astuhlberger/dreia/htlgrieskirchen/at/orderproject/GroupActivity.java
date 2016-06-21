@@ -147,18 +147,19 @@ public class GroupActivity extends Activity {
         Intent i = getIntent();
         Bundle params = i.getExtras();
         if (params!=null){
-            restaurantname = params.getString("MenuRestaurant");
-            counterForGroup = params.getInt("MenuId");
-            adminname = params.getString("MenuAdmin");
-            String member = params.getString("MenuMember");
-            String[] members = member.split(",");
-            for (int k = 0; k<members.length; k++){
-                usersInGroup.add(members[k]);
+            if (params.containsKey("MenuAdmin")) {
+                restaurantname = params.getString("MenuRestaurant");
+                counterForGroup = params.getInt("MenuId");
+                adminname = params.getString("MenuAdmin");
+                String member = params.getString("MenuMember");
+                String[] members = member.split(",");
+                for (int k = 0; k < members.length; k++) {
+                    usersInGroup.add(members[k]);
+                }
+                //TODO: die beiden unteren werte sind aus grouporders und gehören für showOrder.
+                intentProducts = params.getString("MenuProducts");
+                intentPrice = params.getString("MenuPrice");
             }
-            //TODO: die beiden unteren werte sind aus grouporders und gehören für showOrder.
-            intentProducts = params.getString("MenuProducts");
-            intentPrice = params.getString("MenuPrice");
-
         }
     }
 
