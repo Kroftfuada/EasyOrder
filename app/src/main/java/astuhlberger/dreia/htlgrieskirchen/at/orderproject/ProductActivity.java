@@ -87,7 +87,7 @@ public class ProductActivity extends Activity {
         order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: hashmap zurückliefern an intentforresult
+                //TODO: hashmap zurückliefern an intentforresult und die bestellung in die user bills datenbank werfen
             }
         });
 
