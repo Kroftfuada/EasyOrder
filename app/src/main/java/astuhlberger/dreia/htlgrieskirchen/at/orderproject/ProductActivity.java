@@ -72,7 +72,7 @@ public class ProductActivity extends Activity {
         productList = (ListView) findViewById(R.id.listView_productlist);
         productBase = new Firebase("https://easyorderproducts.firebaseio.com");
         billBase = new Firebase("https://easyorderbills.firebaseio.com");
-
+        product = new HashMap<>();
         productname=new ArrayList<String>();
         price=new ArrayList<String>();
         amount=new ArrayList<String>();
