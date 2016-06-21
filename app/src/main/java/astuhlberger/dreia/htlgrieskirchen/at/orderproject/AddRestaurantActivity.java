@@ -173,8 +173,9 @@ public class AddRestaurantActivity extends Activity
 
     private void logout() {
 
-        Intent i = new Intent(this,LoginActivity.class);
-        startActivity(i);
+        //TODO: username aus den konstanten werfen
+
+        System.exit(0);
     }
 
     @Override
@@ -261,13 +262,19 @@ public class AddRestaurantActivity extends Activity
                         if (admin.equals(globalUsername)) {
                             userInGroup = true;
                         }
+
                         if (userInGroup == false) {
                             String members = (String) dataSnapshot.child(String.valueOf((i + 1))).child("Member").getValue();
-                            String member[] = members.split(",");
-                            int count = member.length;
-                            for (int j = 0; j < count; j++) {
-                                if (userInGroup == false && member[j].equals(globalUsername)) {
-                                    userInGroup = true;
+                            String member[];
+
+                            if(members.contains(","))
+                            {
+                                member = members.split(",");
+                                int count = member.length;
+                                for (int j = 0; j < count; j++) {
+                                    if (userInGroup == false && member[j].equals(globalUsername)) {
+                                        userInGroup = true;
+                                    }
                                 }
                             }
                         }

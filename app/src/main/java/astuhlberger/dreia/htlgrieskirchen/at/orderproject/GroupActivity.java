@@ -323,9 +323,7 @@ public class GroupActivity extends Activity {
     }
 
     private void logout() {
-
-
-
+        //TODO: username aus den konstanten werfen
         System.exit(0);
     }
     private void showGroups() {
@@ -419,12 +417,6 @@ public class GroupActivity extends Activity {
                                 if (userInGroup == false && member[j].equals(globalUsername)) {
                                     userInGroup = true;
                                 }
-                            }
-                        }
-                        else
-                        {
-                            if (members.equals(adminname)) {
-                                userInGroup = true;
                             }
                         }
                     }
