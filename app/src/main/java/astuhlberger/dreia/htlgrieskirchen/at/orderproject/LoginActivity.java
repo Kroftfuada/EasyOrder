@@ -45,9 +45,7 @@ public class LoginActivity extends Activity{
                     returnIntent.putExtra("password",login_password);
                     setResult(Activity.RESULT_OK, returnIntent);
                     finish();
-
-                    //TODO: ob schon verificated
-                }
+                                    }
                 else
                 {
                     Toast.makeText(getApplicationContext(),"Passwort oder Username falsch",Toast.LENGTH_LONG).show();
