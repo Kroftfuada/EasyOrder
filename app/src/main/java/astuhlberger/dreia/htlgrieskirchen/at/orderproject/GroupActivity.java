@@ -56,6 +56,9 @@ public class GroupActivity extends Activity {
     String adminname;
     int anz,anztrue;
     int counterForGroup = 0;
+    int groupID = 0;
+    boolean showOrders = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +140,7 @@ public class GroupActivity extends Activity {
 
     private void usersToFirebase()
     {
+
         dataBaseGroups.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -156,10 +160,12 @@ public class GroupActivity extends Activity {
                         }
                     }
 
+                    groupID = anztrue;
+
                     dataBaseGroups.child(String.valueOf(anztrue)).child("Member").setValue(members);
                     dataBaseGroups.child(String.valueOf(anztrue)).child("Restaurant").setValue(restaurantname);
                     counterForGroup++;
-                    Toast.makeText(getApplicationContext(),"The Group has been made. Please go to insert your wished products now.",Toast.LENGTH_LONG);
+                    Toast.makeText(getApplicationContext(), "The Group has been made. Please go to insert your wished products now.", Toast.LENGTH_LONG);
                 }
 
             }
@@ -181,22 +187,17 @@ public class GroupActivity extends Activity {
     {
         dataBaseUsers.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
                 String snapShotUsername = dataSnapshot.getValue().toString();
-                if(usernameToAdd.getText().toString()!=null)
-                {
-                    if(dataSnapshot.child(usernameToAdd.getText().toString()).exists()&& !usersInGroup.contains(usernameToAdd.getText().toString()))
-                    {
+                if (usernameToAdd.getText().toString() != null) {
+                    if (dataSnapshot.child(usernameToAdd.getText().toString()).exists() && !usersInGroup.contains(usernameToAdd.getText().toString())) {
                         usersInGroup.add(usernameToAdd.getText().toString());
-                        restaurantAdapter = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1,usersInGroup);
+                        restaurantAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, usersInGroup);
                         groupUsers.setAdapter(restaurantAdapter);
                     }
-                }
-                else
-                {
-                    Toast.makeText(getApplicationContext(),"Pls insert a valid username",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Pls insert a valid username", Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -210,23 +211,42 @@ public class GroupActivity extends Activity {
     }
 
     private void showOrderDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        //TODO: Listview einfügen und mit daten aus bestellung füllen
-        builder.setNegativeButton("OK", null);
-        builder.show();
-
+        showOrders = true;
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setTitle("Items to order.");
         final LinearLayout dialog = (LinearLayout) getLayoutInflater().inflate(R.layout.allproducts, null);
         alert.setView(dialog);
-        ListView order = (ListView) dialog.findViewById(R.id.listView_groups);
+        final ListView order = (ListView) dialog.findViewById(R.id.listViewProducts);
 
-        //TODO: items zusammenrechnen und in lv anzeigen, mit summe
+        if (showOrders == true) {
+            groupOrder.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    String products = (String)dataSnapshot.child("1").child("Products+Numbers:").getValue();
+                    String sum = dataSnapshot.child("1").child("SumPrice").getValue().toString();
+
+                    String[] allProducts = products.split(",");
+                    for (int k = 0; k < allProducts.length; k++) {
+                        itemsToOrder.add(allProducts[k].toString());
+                    }
+                    itemsToOrder.add(sum);
+                    Log.d("seas", products);
+                    Log.d("seas", sum);
+
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+            });
+
+            ArrayAdapter<String> groupad = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, itemsToOrder);
+            order.setAdapter(groupad);
 
 
-        ArrayAdapter<String> groupad = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1,itemsToOrder);
-        order.setAdapter(groupad);
-
+        }
     }
 
     private void showProductActivity() {
