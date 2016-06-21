@@ -104,10 +104,15 @@ public class GroupActivity extends Activity {
         }
 
 
-        //TODO: leave
 
 
 
+        btnLeave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LeaveGroup();
+            }
+        });
 
         btnAddUser.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,6 +154,10 @@ public class GroupActivity extends Activity {
 
     }
 
+    private void LeaveGroup() {
+        //TODO: leave Group
+    }
+
     private void intentMethod() {
 
         Intent i = getIntent();
@@ -163,9 +172,10 @@ public class GroupActivity extends Activity {
                 for (int k = 0; k < members.length; k++) {
                     usersInGroup.add(members[k]);
                 }
-                //TODO: die beiden unteren werte sind aus grouporders und gehören für showOrder.
+
                 intentProducts = params.getString("MenuProducts");
                 intentPrice = params.getString("MenuPrice");
+                setLists(intentProducts,intentPrice);
             }
         }
     }
@@ -291,16 +301,10 @@ public class GroupActivity extends Activity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    String products = (String)dataSnapshot.child("1").child("Products+Numbers:").getValue();
-                    String sum = dataSnapshot.child("1").child("SumPrice").getValue().toString();
+                    String products = (String)dataSnapshot.child(String.valueOf(counterForGroup)).child("Products+Numbers:").getValue();
+                    String sum = dataSnapshot.child(String.valueOf(counterForGroup)).child("SumPrice").getValue().toString();
 
-                    String[] allProducts = products.split(",");
-                    for (int k = 0; k < allProducts.length; k++) {
-                        itemsToOrder.add(allProducts[k].toString());
-                    }
-                    itemsToOrder.add(sum);
-                    Log.d("seas", products);
-                    Log.d("seas", sum);
+                    setLists(products, sum);
 
                 }
 
@@ -315,6 +319,16 @@ public class GroupActivity extends Activity {
 
 
         }
+    }
+
+    private void setLists(String products, String sum) {
+        String[] allProducts = products.split(",");
+        for (int k = 0; k < allProducts.length; k++) {
+            itemsToOrder.add(allProducts[k].toString());
+        }
+        itemsToOrder.add(sum);
+        Log.d("seas", products);
+        Log.d("seas", sum);
     }
 
     private void showProductActivity() {
