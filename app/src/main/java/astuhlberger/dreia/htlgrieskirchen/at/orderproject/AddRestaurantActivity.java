@@ -34,8 +34,17 @@ public class AddRestaurantActivity extends Activity
     ArrayList<String> restaurants;
     Firebase dataBase;
     Firebase groupBase;
+    Firebase groupOrder;
+
     //al für  menüpunkt
     ArrayList<String> groupid;
+    String menurestaurant;
+    String menuadmin;
+    String menumember;
+    String menuproducts;
+    String menuprice;
+    int id;
+
     String username;
 
     @Override
@@ -44,6 +53,7 @@ public class AddRestaurantActivity extends Activity
         setContentView(R.layout.add_restaurant);
         dataBase = new Firebase("https://easyorderrestaurant.firebaseIO.com/");
         groupBase = new Firebase("https://easyordergroups.firebaseio.com");
+        groupOrder = new Firebase("https://easyordergrouporder.firebaseio.com");
         restaurants = new ArrayList<>();
         dataBase.child("logOn").setValue("false");
 
@@ -79,7 +89,7 @@ public class AddRestaurantActivity extends Activity
 
         dataBase.child("logOn").setValue("true");
         groupid = new ArrayList();
-        fillMenuGroup();
+
     }
 
     private void addDataToRestaurants()
@@ -144,7 +154,8 @@ public class AddRestaurantActivity extends Activity
         switch (id) {
             case R.id.action_bills: showBills();
                 break;
-            case R.id.action_groups: showGroups();
+            case R.id.action_groups: fillMenuGroup();
+                showGroups();
                 break;
             case R.id.action_logout: logout();
                 break;
@@ -173,13 +184,45 @@ public class AddRestaurantActivity extends Activity
                 openGroupActivity(position);
             }
         });
+        alert.show();
     }
 
     private void openGroupActivity(int position) {
         String group = groupid.get(position);
         String[] idString = group.split("-");
-        int id = Integer.parseInt(idString[1]);
-        //TODO: restaurantname etc holen aus db und intent an group activity machen!
+        id =  Integer.parseInt(idString[1]);
+        groupBase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                menurestaurant = (String) dataSnapshot.child(String.valueOf(id)).child("Restaurant").getValue();
+                menuadmin = (String) dataSnapshot.child(String.valueOf(id)).child("Admin").getValue();
+                menumember = (String) dataSnapshot.child(String.valueOf(id)).child("Member").getValue();
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+        groupOrder.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                menuproducts = (String) dataSnapshot.child(String.valueOf(id)).child("Products+Numbers").getValue();
+                menuprice = (String) dataSnapshot.child(String.valueOf(id)).child("SumPrice").getValue();
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+        Intent i = new Intent(this, GroupActivity.class);
+        i.putExtra("MenuRestaurant",menurestaurant);
+        i.putExtra("MenuAdmin",menuadmin);
+        i.putExtra("MenuMember",menumember);
+        i.putExtra("MenuProducts",menuproducts);
+        i.putExtra("MenuPrice",menuprice);
+        startActivity(i);
     }
 
     private void showBills() {

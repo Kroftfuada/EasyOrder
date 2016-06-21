@@ -9,6 +9,7 @@ import android.os.StrictMode;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -29,6 +30,7 @@ public class ProductActivity extends Activity {
     ArrayList<String> productname;
     ArrayList<String> price;
     ArrayList<String> amount;
+    Button order, cancel;
 
 
     @Override
@@ -49,6 +51,23 @@ public class ProductActivity extends Activity {
                 showDialogs(items.get(position));
             }
         });
+
+        order = (Button) findViewById(R.id.btn_orderProducts);
+        cancel = (Button) findViewById(R.id.btn_cancel);
+
+        order.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: hashmap zurückliefern an intentforresult
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: Activity schließen und wieder auf group activity zurückkehren
+            }
+        });
     }
 
     private void showDialogs(final String s) {
@@ -67,12 +86,5 @@ public class ProductActivity extends Activity {
 
         builder.setNegativeButton("Cancel", null);
         builder.show();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        //TODO: hashmap zurückliefern an intentforresult
     }
 }
