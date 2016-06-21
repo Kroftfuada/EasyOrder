@@ -155,7 +155,7 @@ public class GroupActivity extends Activity {
             for (int k = 0; k<members.length; k++){
                 usersInGroup.add(members[k]);
             }
-            //TODO: die beiden unteren werte sind aus grouporders und gehören hineingerechnet.
+            //TODO: die beiden unteren werte sind aus grouporders und gehören für showOrder.
             intentProducts = params.getString("MenuProducts");
             intentPrice = params.getString("MenuPrice");
 
