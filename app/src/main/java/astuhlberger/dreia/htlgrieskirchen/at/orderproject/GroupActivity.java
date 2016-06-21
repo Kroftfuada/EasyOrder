@@ -419,12 +419,6 @@ public class GroupActivity extends Activity {
                                 }
                             }
                         }
-                        else
-                        {
-                            if (members.equals(adminname)) {
-                                userInGroup = true;
-                            }
-                        }
                     }
                     if (userInGroup) {
                         String restaurant = (String) dataSnapshot.child(String.valueOf((i + 1))).child("Restaurant").getValue();

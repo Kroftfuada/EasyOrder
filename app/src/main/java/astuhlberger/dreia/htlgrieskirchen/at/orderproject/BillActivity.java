@@ -89,28 +89,34 @@ public class BillActivity extends Activity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 long anz = dataSnapshot.getChildrenCount();
 
-                for (int i = 0; i<anz; i++){
+                for (int i = 0; i < anz; i++) {
 
                     boolean userInGroup = false;
 
-                    String admin = (String) dataSnapshot.child(String.valueOf((i+1))).child("Admin").getValue();
+                    String admin = (String) dataSnapshot.child(String.valueOf((i + 1))).child("Admin").getValue();
 
-                    if (admin.equals(globalUsername)){
+                    if (admin.equals(globalUsername)) {
                         userInGroup = true;
                     }
-                    if (userInGroup==false){
-                        String members = (String) dataSnapshot.child(String.valueOf((i+1))).child("Member").getValue();
-                        String member[] = members.split(",");
-                        int count = member.length;
-                        for (int j = 0; j<count; j++){
-                            if (userInGroup==false && member[j].equals(globalUsername)){
-                                userInGroup = true;
+
+                    if (userInGroup == false) {
+                        String members = (String) dataSnapshot.child(String.valueOf((i + 1))).child("Member").getValue();
+                        String member[];
+
+                        if(members.contains(","))
+                        {
+                            member = members.split(",");
+                            int count = member.length;
+                            for (int j = 0; j < count; j++) {
+                                if (userInGroup == false && member[j].equals(globalUsername)) {
+                                    userInGroup = true;
+                                }
                             }
                         }
                     }
-                    if (userInGroup){
-                        String restaurant = (String) dataSnapshot.child(String.valueOf((i+1))).child("Restaurant").getValue();
-                        String group = "Group -"+(i+1)+"-, "+restaurant+", Admin: "+ admin;
+                    if (userInGroup) {
+                        String restaurant = (String) dataSnapshot.child(String.valueOf((i + 1))).child("Restaurant").getValue();
+                        String group = "Group -" + (i + 1) + "-, " + restaurant + ", Admin: " + admin;
                         groupid.add(group);
                     }
                 }
@@ -130,7 +136,6 @@ public class BillActivity extends Activity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
 
-                //TODO: Aus Konstanten den usernamen holen und statt diesen usernamen einsetzen
                 if (dataSnapshot.child("Username").exists()){
                     int anz = (int) dataSnapshot.child("Username").getChildrenCount();
                     for (int i = 0; i<anz; i++) {
