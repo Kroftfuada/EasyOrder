@@ -323,10 +323,8 @@ public class GroupActivity extends Activity {
     }
 
     private void logout() {
-
-
-
-        System.exit(0);
+        Intent i = new Intent(this,LoginActivity.class);
+        startActivity(i);
     }
     private void showGroups() {
 

@@ -181,8 +181,9 @@ public class BillActivity extends Activity {
     }
 
     private void logout() {
-        //TODO: username aus den konstanten werfen
-        System.exit(0);
+        Intent i = new Intent(this,LoginActivity.class);
+        startActivity(i);
+
     }
 
     private void showGroups() {
