@@ -66,13 +66,17 @@ public class GroupActivity extends Activity {
     int groupID = 0;
     boolean showOrders = false;
 
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    String globalUsername = prefs.getString("username", "");
+    SharedPreferences prefs = null;
+    String globalUsername = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.groupactivity_layout);
         Firebase.setAndroidContext(this);
+
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        globalUsername = prefs.getString("username", "");
         groupid = new ArrayList();
         itemsToOrder = new ArrayList();
         prodctmap = new HashMap<>();
@@ -173,6 +177,31 @@ public class GroupActivity extends Activity {
             if (params!=null){
                 prodctmap = (HashMap<String, Integer>) params.get("List");
                 //TODO: prodctmap hinzufügen zu den bisherigen gruppenbestellungen mit preis, welcher noch ausgerechnet werden muss.
+                String prodPnumbers="";
+                String sum = "";
+                int anzFromHash = prodctmap.size();
+                String[]products = new String[anzFromHash];
+                int anz =0;
+
+                for(String key : prodctmap.keySet())
+                {
+                    products[anz]= key;
+                }
+
+                for(int i = 0;i<anzFromHash;i++)
+                {
+                    if(i== (anzFromHash-1))
+                    {
+                        prodPnumbers += products[0] + "-" + prodctmap.get(products);
+                    }
+                    else
+                    {
+                        prodPnumbers += products[0] + "-," + prodctmap.get(products);
+                    }
+                }
+                Log.d("swag",prodPnumbers);
+
+
             }
         }
     }

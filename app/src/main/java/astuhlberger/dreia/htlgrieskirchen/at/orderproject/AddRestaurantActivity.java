@@ -47,8 +47,8 @@ public class AddRestaurantActivity extends Activity
     String menuprice;
     int id;
 
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    String globalUsername = prefs.getString("username", "");
+    SharedPreferences prefs = null;
+    String globalUsername = null;
 
     String username;
     boolean showGroups;
@@ -58,7 +58,8 @@ public class AddRestaurantActivity extends Activity
         setContentView(R.layout.add_restaurant);
         Firebase.setAndroidContext(this);
 
-
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        globalUsername = prefs.getString("username", "");
         dataBase = new Firebase("https://easyorderrestaurant.firebaseIO.com/");
         groupBase = new Firebase("https://easyordergroups.firebaseio.com");
         groupOrder = new Firebase("https://easyordergrouporder.firebaseio.com");
@@ -173,9 +174,8 @@ public class AddRestaurantActivity extends Activity
 
     private void logout() {
 
-        //TODO: username aus den konstanten werfen
-
-        System.exit(0);
+        Intent i = new Intent(this,LoginActivity.class);
+        startActivity(i);
     }
 
     @Override

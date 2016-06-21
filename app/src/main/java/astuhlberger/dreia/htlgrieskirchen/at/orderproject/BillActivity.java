@@ -50,15 +50,18 @@ public class BillActivity extends Activity {
     BillAdapter ba;
     ListView billList;
 
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    String globalUsername = prefs.getString("username", "");
+    SharedPreferences prefs = null;
+    String globalUsername = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bill_activity_layout);
-
         Firebase.setAndroidContext(this);
+
+
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        globalUsername = prefs.getString("username", "");
         dataBase = new Firebase("https://easyorderbills.firebaseio.com");
         groupBase = new Firebase("https://easyordergroups.firebaseio.com");
         groupOrder = new Firebase("https://easyordergrouporder.firebaseio.com");

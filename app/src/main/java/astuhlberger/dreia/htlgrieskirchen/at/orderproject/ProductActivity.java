@@ -52,8 +52,8 @@ public class ProductActivity extends Activity {
     String productnameBase;
     String priceBase;
     String amountBase;
-    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    String globalUsername = prefs.getString("username", "");
+    SharedPreferences prefs = null;
+    String globalUsername = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +61,8 @@ public class ProductActivity extends Activity {
         setContentView(R.layout.product_activity);
 
         Firebase.setAndroidContext(this);
-
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        globalUsername = prefs.getString("username", "");
         Intent i = getIntent();
         Bundle params = i.getExtras();
         if (params!=null){

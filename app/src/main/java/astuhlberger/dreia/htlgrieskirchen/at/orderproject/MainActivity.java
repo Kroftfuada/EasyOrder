@@ -46,8 +46,6 @@ public class MainActivity extends AppCompatActivity {
                 dataBase.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Log.d("Eingeloggt", "Überprüfung der Daten");
-                        Log.d("Eingeloggt",dataSnapshot.child(username).child("password").getValue().toString() + " _ " +pw);
                         if (dataSnapshot.child(username).exists() && dataSnapshot.child(username).child("password").getValue().toString().equals(pw)) {
                             if(dataSnapshot.child(username).child("registered").getValue().toString().equals("true")) {
                                 Log.d("Eingeloggt", "Erfolgreich eingeloggt");
