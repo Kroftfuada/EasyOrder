@@ -49,7 +49,7 @@ public class GroupActivity extends Activity {
     Button btnShowOrders;
     String restaurantname;
     EditText usernameToAdd;
-    Firebase dataBaseUsers,dataBaseGroups;
+    Firebase dataBaseUsers,dataBaseGroups,groupOrder;
     ArrayList<String>usersInGroup,itemsToOrder;
     ListView groupUsers;
     ArrayAdapter<String> restaurantAdapter;
