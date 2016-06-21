@@ -51,6 +51,7 @@ public class AddRestaurantActivity extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_restaurant);
+        Firebase.setAndroidContext(this);
         dataBase = new Firebase("https://easyorderrestaurant.firebaseIO.com/");
         groupBase = new Firebase("https://easyordergroups.firebaseio.com");
         groupOrder = new Firebase("https://easyordergrouporder.firebaseio.com");

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
@@ -16,6 +17,11 @@ import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -25,12 +31,22 @@ import java.util.HashMap;
 public class ProductActivity extends Activity {
     ListView productList;
     HashMap<String, Integer> product;
-    ArrayList<String> items = new ArrayList<String>();
+
+    ArrayList<String> items;
+
     ProductAdapter pa;
+
     ArrayList<String> productname;
     ArrayList<String> price;
     ArrayList<String> amount;
+
     Button order, cancel;
+    String restaurantname;
+    Firebase productBase;
+    String itemBase;
+    String productnameBase;
+    String priceBase;
+    String amountBase;
 
 
     @Override
@@ -38,9 +54,22 @@ public class ProductActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.product_activity);
 
-        productList = (ListView) findViewById(R.id.listView_productlist);
+        Firebase.setAndroidContext(this);
 
-        //TODO: werte aus datenbank holen für productname und price und mit amount dann noch weiterverarbeiten durch anderen dialog
+        Intent i = getIntent();
+        Bundle params = i.getExtras();
+        if (params!=null){
+            restaurantname = params.getString("name");
+        }
+
+        productList = (ListView) findViewById(R.id.listView_productlist);
+        productBase = new Firebase("https://easyorderproducts.firebaseio.com");
+
+        productname=new ArrayList<String>();
+        price=new ArrayList<String>();
+        amount=new ArrayList<String>();
+        items = new ArrayList<String>();
+        fillLists();
 
         pa = new ProductAdapter(this,items,productname,price,amount);
         productList.setAdapter(pa);
@@ -48,7 +77,7 @@ public class ProductActivity extends Activity {
         productList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                showDialogs(items.get(position));
+                showDialogs(productname.get(position),position);
             }
         });
 
@@ -70,7 +99,30 @@ public class ProductActivity extends Activity {
         });
     }
 
-    private void showDialogs(final String s) {
+    private void fillLists() {
+        productBase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                int anz = (int) dataSnapshot.child(restaurantname).getChildrenCount();
+                for (int i = 0; i<anz; i++){
+                    itemBase = (String) dataSnapshot.child(restaurantname).child(String.valueOf((i+1))).child("Image").getValue();
+                    priceBase = (String) dataSnapshot.child(restaurantname).child(String.valueOf((i+1))).child("Price").getValue();
+                    productnameBase = (String) dataSnapshot.child(restaurantname).child(String.valueOf((i+1))).child("Product").getValue();
+                    amountBase = String.valueOf(0);
+                    items.add(itemBase);
+                    price.add(priceBase);
+                    productname.add(productnameBase);
+                    amount.add(amountBase);
+                }
+            }
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+
+    private void showDialogs(final String s, final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         LinearLayout vDialog = (LinearLayout) getLayoutInflater().inflate(R.layout.product_selection, null);
         builder.setView(vDialog);
@@ -81,9 +133,10 @@ public class ProductActivity extends Activity {
             public void onClick(DialogInterface dialog, int which) {
                 int number = numberpicker.getValue();
                 product.put(s, number);
+                amount.set(position,String.valueOf(number));
+                pa.notifyDataSetChanged();
             }
         });
-
         builder.setNegativeButton("Cancel", null);
         builder.show();
     }
