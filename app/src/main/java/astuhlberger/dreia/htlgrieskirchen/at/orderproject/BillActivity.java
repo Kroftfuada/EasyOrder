@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,6 +50,8 @@ public class BillActivity extends Activity {
     BillAdapter ba;
     ListView billList;
 
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    String globalUsername = prefs.getString("username", "");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +78,10 @@ public class BillActivity extends Activity {
 
 
     }
-
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+    }
     private void fillMenuGroup() {
 
         groupBase.addValueEventListener(new ValueEventListener() {
@@ -87,8 +94,8 @@ public class BillActivity extends Activity {
                     boolean userInGroup = false;
 
                     String admin = (String) dataSnapshot.child(String.valueOf((i+1))).child("Admin").getValue();
-                    //TODO: Aus konstanten usernamen holen und statt diesen usernamen ersetzen
-                    if (admin.equals("Username")){
+
+                    if (admin.equals(globalUsername)){
                         userInGroup = true;
                     }
                     if (userInGroup==false){
@@ -96,7 +103,7 @@ public class BillActivity extends Activity {
                         String member[] = members.split(",");
                         int count = member.length;
                         for (int j = 0; j<count; j++){
-                            if (userInGroup==false && member[j].equals("Username")){
+                            if (userInGroup==false && member[j].equals(globalUsername)){
                                 userInGroup = true;
                             }
                         }

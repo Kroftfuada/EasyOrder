@@ -61,4 +61,8 @@ public class VerificationActivity extends Activity{
         }
 
     }
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+    }
 }

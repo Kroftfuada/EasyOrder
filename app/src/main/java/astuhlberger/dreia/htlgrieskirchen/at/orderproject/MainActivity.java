@@ -1,7 +1,9 @@
 package astuhlberger.dreia.htlgrieskirchen.at.orderproject;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -50,6 +52,11 @@ public class MainActivity extends AppCompatActivity {
                             if(dataSnapshot.child(username).child("registered").getValue().toString().equals("true")) {
                                 Log.d("Eingeloggt", "Erfolgreich eingeloggt");
 
+                                SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                                SharedPreferences.Editor editor = SP.edit();
+                                editor.putString("username",username);
+                                editor.commit();
+
 
 
                                 Intent intent = new Intent(getApplicationContext(), AddRestaurantActivity.class);
@@ -78,6 +85,11 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+    }
+
     public static final String md5(final String s) {
         final String MD5 = "MD5";
         try {

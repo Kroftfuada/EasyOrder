@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,6 +47,9 @@ public class AddRestaurantActivity extends Activity
     String menuprice;
     int id;
 
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    String globalUsername = prefs.getString("username", "");
+
     String username;
     boolean showGroups;
     @Override
@@ -52,6 +57,8 @@ public class AddRestaurantActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_restaurant);
         Firebase.setAndroidContext(this);
+
+
         dataBase = new Firebase("https://easyorderrestaurant.firebaseIO.com/");
         groupBase = new Firebase("https://easyordergroups.firebaseio.com");
         groupOrder = new Firebase("https://easyordergrouporder.firebaseio.com");
@@ -86,7 +93,6 @@ public class AddRestaurantActivity extends Activity
 
             }
         });
-        //TODO: Text in ArrayList der Restaurants wird in weiß angezeigt
 
         dataBase.child("logOn").setValue("true");
         groupid = new ArrayList();
@@ -166,8 +172,14 @@ public class AddRestaurantActivity extends Activity
     }
 
     private void logout() {
-        //TODO: username aus den konstanten werfen
-        System.exit(0);
+
+        Intent i = new Intent(this,LoginActivity.class);
+        startActivity(i);
+    }
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
     }
 
     private void showGroups() {
@@ -245,8 +257,8 @@ public class AddRestaurantActivity extends Activity
                         boolean userInGroup = false;
 
                         String admin = (String) dataSnapshot.child(String.valueOf((i + 1))).child("Admin").getValue();
-                        //TODO: Aus konstanten usernamen hollen und statt diesen usernamen ersetzen
-                        if (admin.equals("Username")) {
+
+                        if (admin.equals(globalUsername)) {
                             userInGroup = true;
                         }
                         if (userInGroup == false) {
@@ -254,7 +266,7 @@ public class AddRestaurantActivity extends Activity
                             String member[] = members.split(",");
                             int count = member.length;
                             for (int j = 0; j < count; j++) {
-                                if (userInGroup == false && member[j].equals("Username")) {
+                                if (userInGroup == false && member[j].equals(globalUsername)) {
                                     userInGroup = true;
                                 }
                             }

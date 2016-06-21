@@ -216,4 +216,8 @@ public class SignUpActivity extends Activity {
         });
         return true;
     }
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+    }
 }

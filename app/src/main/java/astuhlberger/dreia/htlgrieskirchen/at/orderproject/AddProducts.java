@@ -26,7 +26,10 @@ public class AddProducts extends Activity{
         productList = new ArrayList<String>();
         addProducts();
     }
-
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+    }
     private void addProducts() {
         imageAdapter = new ImageAdapter(getBaseContext(), productList);
         gridView.setAdapter(imageAdapter);

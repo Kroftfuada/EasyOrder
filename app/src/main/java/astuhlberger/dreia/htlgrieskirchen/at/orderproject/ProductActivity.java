@@ -5,8 +5,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -50,7 +52,8 @@ public class ProductActivity extends Activity {
     String productnameBase;
     String priceBase;
     String amountBase;
-
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    String globalUsername = prefs.getString("username", "");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,24 +110,27 @@ public class ProductActivity extends Activity {
             }
         });
     }
-
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+    }
     private void setBillsFirebase() {
-        //TODO: username mit konstate ersetzten
+
         billBase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                int anz = (int) dataSnapshot.child("Username").getChildrenCount();
+                int anz = (int) dataSnapshot.child(globalUsername).getChildrenCount();
                 int anztrue = anz+1;
 
-                billBase.child("Username").child(String.valueOf(anztrue)).child("Restaurant").setValue(restaurantname);
+                billBase.child(globalUsername).child(String.valueOf(anztrue)).child("Restaurant").setValue(restaurantname);
                 Calendar cal = Calendar.getInstance();
                 Date date = cal.getTime();
-                billBase.child("Username").child(String.valueOf(anztrue)).child("Date").setValue(date);
+                billBase.child(globalUsername).child(String.valueOf(anztrue)).child("Date").setValue(date);
                 int billprice =0;
                 for (int i = 0; i < amount.size();i++){
                     billprice+=Integer.parseInt(amount.get(i))*Integer.parseInt(price.get(i));
                 }
-                billBase.child("Username").child(String.valueOf(anztrue)).child("Price").setValue(billprice);
+                billBase.child(globalUsername).child(String.valueOf(anztrue)).child("Price").setValue(billprice);
             }
 
             @Override

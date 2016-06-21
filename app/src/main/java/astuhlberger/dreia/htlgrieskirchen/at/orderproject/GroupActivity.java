@@ -3,7 +3,9 @@ package astuhlberger.dreia.htlgrieskirchen.at.orderproject;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -64,7 +66,8 @@ public class GroupActivity extends Activity {
     int groupID = 0;
     boolean showOrders = false;
 
-
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    String globalUsername = prefs.getString("username", "");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -324,7 +327,6 @@ public class GroupActivity extends Activity {
 
         System.exit(0);
     }
-
     private void showGroups() {
 
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -399,8 +401,8 @@ public class GroupActivity extends Activity {
                     boolean userInGroup = false;
 
                     String admin = (String) dataSnapshot.child(String.valueOf((i + 1))).child("Admin").getValue();
-                    //TODO: Aus konstanten usernamen hollen und statt diesen usernamen ersetzen
-                    if (admin.equals(adminname)) {
+
+                    if (admin.equals(globalUsername)) {
                         userInGroup = true;
                     }
 
@@ -413,7 +415,7 @@ public class GroupActivity extends Activity {
                             member = members.split(",");
                             int count = member.length;
                             for (int j = 0; j < count; j++) {
-                                if (userInGroup == false && member[j].equals("Username")) {
+                                if (userInGroup == false && member[j].equals(globalUsername)) {
                                     userInGroup = true;
                                 }
                             }
