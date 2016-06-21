@@ -284,7 +284,9 @@ public class GroupActivity extends Activity {
     }
 
     private void logout() {
-        //TODO: username aus den konstanten werfen
+
+
+
         System.exit(0);
     }
 
