@@ -44,7 +44,7 @@ public class GroupActivity extends Activity {
     String restaurantname;
     EditText usernameToAdd;
     Firebase dataBaseUsers,dataBaseGroups;
-    ArrayList<String>usersInGroup;
+    ArrayList<String>usersInGroup,itemsToOrder;
     ListView groupUsers;
     ArrayAdapter<String> restaurantAdapter;
     String adminname;
@@ -57,6 +57,7 @@ public class GroupActivity extends Activity {
         setContentView(R.layout.groupactivity_layout);
         Firebase.setAndroidContext(this);
         groupid = new ArrayList();
+        itemsToOrder = new ArrayList();
 
         groupBase = new Firebase("https://easyordergroups.firebaseio.com");
         usersInGroup = new ArrayList<>();
@@ -201,10 +202,18 @@ public class GroupActivity extends Activity {
     }
 
     private void showOrderDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        //TODO: Listview einfügen und mit daten aus bestellung füllen
-        builder.setNegativeButton("OK", null);
-        builder.show();
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Items to order.");
+        final LinearLayout dialog = (LinearLayout) getLayoutInflater().inflate(R.layout.allproducts, null);
+        alert.setView(dialog);
+        ListView order = (ListView) dialog.findViewById(R.id.listView_groups);
+
+        //TODO: items zusammenrechnen und in lv anzeigen, mit summe
+
+
+        ArrayAdapter<String> groupad = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1,itemsToOrder);
+        order.setAdapter(groupad);
 
     }
 
@@ -260,6 +269,7 @@ public class GroupActivity extends Activity {
                 openGroupActivity(position);
             }
         });
+        alert.show();
     }
 
     private void openGroupActivity(int position) {
@@ -287,15 +297,27 @@ public class GroupActivity extends Activity {
 
                     String admin = (String) dataSnapshot.child(String.valueOf((i + 1))).child("Admin").getValue();
                     //TODO: Aus konstanten usernamen hollen und statt diesen usernamen ersetzen
-                    if (admin.equals("Username")) {
+                    if (admin.equals(adminname)) {
                         userInGroup = true;
                     }
+
                     if (userInGroup == false) {
                         String members = (String) dataSnapshot.child(String.valueOf((i + 1))).child("Member").getValue();
-                        String member[] = members.split(",");
-                        int count = member.length;
-                        for (int j = 0; j < count; j++) {
-                            if (userInGroup == false && member[j].equals("Username")) {
+                        String member[];
+
+                        if(members.contains(","))
+                        {
+                            member = members.split(",");
+                            int count = member.length;
+                            for (int j = 0; j < count; j++) {
+                                if (userInGroup == false && member[j].equals("Username")) {
+                                    userInGroup = true;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (members.equals(adminname)) {
                                 userInGroup = true;
                             }
                         }

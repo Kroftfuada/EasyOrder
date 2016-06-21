@@ -37,7 +37,7 @@ public class AddRestaurantActivity extends Activity
     //al für  menüpunkt
     ArrayList<String> groupid;
     String username;
-
+    boolean showGroups;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +46,7 @@ public class AddRestaurantActivity extends Activity
         groupBase = new Firebase("https://easyordergroups.firebaseio.com");
         restaurants = new ArrayList<>();
         dataBase.child("logOn").setValue("false");
-
+        showGroups = false;
         Intent i = getIntent();
         Bundle b = i.getExtras();
         if(b!=null)
@@ -188,43 +188,45 @@ public class AddRestaurantActivity extends Activity
     }
 
     private void fillMenuGroup() {
+        showGroups = true;
+        if(showGroups == true) {
+            groupBase.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    long anz = dataSnapshot.getChildrenCount();
 
-        groupBase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                long anz = dataSnapshot.getChildrenCount();
+                    for (int i = 0; i < anz; i++) {
 
-                for (int i = 0; i < anz; i++) {
+                        boolean userInGroup = false;
 
-                    boolean userInGroup = false;
-
-                    String admin = (String) dataSnapshot.child(String.valueOf((i + 1))).child("Admin").getValue();
-                    //TODO: Aus konstanten usernamen hollen und statt diesen usernamen ersetzen
-                    if (admin.equals("Username")) {
-                        userInGroup = true;
-                    }
-                    if (userInGroup == false) {
-                        String members = (String) dataSnapshot.child(String.valueOf((i + 1))).child("Member").getValue();
-                        String member[] = members.split(",");
-                        int count = member.length;
-                        for (int j = 0; j < count; j++) {
-                            if (userInGroup == false && member[j].equals("Username")) {
-                                userInGroup = true;
+                        String admin = (String) dataSnapshot.child(String.valueOf((i + 1))).child("Admin").getValue();
+                        //TODO: Aus konstanten usernamen hollen und statt diesen usernamen ersetzen
+                        if (admin.equals("Username")) {
+                            userInGroup = true;
+                        }
+                        if (userInGroup == false) {
+                            String members = (String) dataSnapshot.child(String.valueOf((i + 1))).child("Member").getValue();
+                            String member[] = members.split(",");
+                            int count = member.length;
+                            for (int j = 0; j < count; j++) {
+                                if (userInGroup == false && member[j].equals("Username")) {
+                                    userInGroup = true;
+                                }
                             }
                         }
-                    }
-                    if (userInGroup) {
-                        String restaurant = (String) dataSnapshot.child(String.valueOf((i + 1))).child("Restaurant").getValue();
-                        String group = "Group -" + (i + 1) + "-, " + restaurant + ", Admin: " + admin;
-                        groupid.add(group);
+                        if (userInGroup) {
+                            String restaurant = (String) dataSnapshot.child(String.valueOf((i + 1))).child("Restaurant").getValue();
+                            String group = "Group -" + (i + 1) + "-, " + restaurant + ", Admin: " + admin;
+                            groupid.add(group);
+                        }
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
 
-            }
-        });
+                }
+            });
+        }
     }
 }
