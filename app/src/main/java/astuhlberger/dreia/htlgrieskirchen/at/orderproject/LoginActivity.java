@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +30,9 @@ public class LoginActivity extends Activity{
         username = (EditText)findViewById(R.id.input_username);
         password = (EditText)findViewById(R.id.input_password);
         login = (Button)findViewById(R.id.btn_login);
+        ImageView iv = (ImageView)findViewById(R.id.logo);
+        iv.setImageResource(R.drawable.logo);
+
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override

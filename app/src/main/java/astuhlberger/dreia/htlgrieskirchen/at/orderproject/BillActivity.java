@@ -39,7 +39,7 @@ public class BillActivity extends Activity {
     String menuproducts;
     String menuprice;
     int id;
-
+    ArrayAdapter<String>ad;
     Firebase dataBase;
     Firebase groupBase;
     Firebase groupOrder;
@@ -47,7 +47,7 @@ public class BillActivity extends Activity {
     ArrayList<String> dates;
     ArrayList<String> restnames;
     ArrayList<String> prices;
-    BillAdapter ba;
+
     ListView billList;
 
     SharedPreferences prefs = null;
@@ -59,13 +59,13 @@ public class BillActivity extends Activity {
         setContentView(R.layout.bill_activity_layout);
         Firebase.setAndroidContext(this);
 
-
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         globalUsername = prefs.getString("username", "");
         dataBase = new Firebase("https://easyorderbills.firebaseio.com");
         groupBase = new Firebase("https://easyordergroups.firebaseio.com");
         groupOrder = new Firebase("https://easyordergrouporder.firebaseio.com");
         billList = (ListView) findViewById(R.id.listView_bill);
+
 
         groupid = new ArrayList();
 
@@ -74,10 +74,6 @@ public class BillActivity extends Activity {
         prices = new ArrayList<>();
 
         fillBillLists();
-
-        ba = new BillAdapter(this,dates,restnames,prices);
-        billList.setAdapter(ba);
-        ba.notifyDataSetChanged();
 
 
     }
@@ -96,14 +92,14 @@ public class BillActivity extends Activity {
 
                     boolean userInGroup = false;
 
-                    String admin = (String) dataSnapshot.child(String.valueOf((i + 1))).child("Admin").getValue();
+                    String admin = (String) dataSnapshot.child(String.valueOf((i + 1))).child(globalUsername).getValue();
 
                     if (admin.equals(globalUsername)) {
                         userInGroup = true;
                     }
 
                     if (userInGroup == false) {
-                        String members = (String) dataSnapshot.child(String.valueOf((i + 1))).child("Member").getValue();
+                        String members = (String) dataSnapshot.child(String.valueOf((i + 1))).child(globalUsername).getValue();
                         String member[];
 
                         if(members.contains(","))
@@ -139,22 +135,30 @@ public class BillActivity extends Activity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
 
-                if (dataSnapshot.child("Username").exists()){
-                    int anz = (int) dataSnapshot.child("Username").getChildrenCount();
+                if (dataSnapshot.child(globalUsername).exists()){
+                    int anz = (int) dataSnapshot.child(globalUsername).getChildrenCount();
                     for (int i = 0; i<anz; i++) {
                         String r1 = "";
                         String d1 = "";
                         String p1 = "";
 
-                        r1 = (String) dataSnapshot.child("Username").child(String.valueOf((i+1))).child("Restaurant").getValue();
-                        p1 = (String) dataSnapshot.child("Username").child(String.valueOf((i+1))).child("Price").getValue();
-                        d1 = (String) dataSnapshot.child("Username").child(String.valueOf((i+1))).child("Date").getValue();
+                        r1 = (String) dataSnapshot.child(globalUsername).child(String.valueOf((i+1))).child("Restaurant").getValue();
+                        p1 = (String) dataSnapshot.child(globalUsername).child(String.valueOf((i+1))).child("Price").getValue();
+                        d1 =  dataSnapshot.child(globalUsername).child(String.valueOf((i+1))).child("Date").getValue().toString();
                         Log.d("Daten geholt", "Daten geholt");
                         dates.add(d1);
                         restnames.add(r1);
                         prices.add(p1);
                         Log.d("In Liste", "In Liste");
                     }
+                    ArrayList<String> data = new ArrayList<>();
+                    for(int i = 0;i<restnames.size();i++)
+                    {
+                        data.add(dates.get(i) + " : " + restnames.get(i)+ " : " +  prices.get(i));
+                    }
+                    ad = new ArrayAdapter<String>(BillActivity.this, android.R.layout.simple_list_item_1, data);
+                    billList.setAdapter(ad);
+                    ad.notifyDataSetChanged();
                 }
             }
 

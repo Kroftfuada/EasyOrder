@@ -65,7 +65,7 @@ public class GroupActivity extends Activity {
     int counterForGroup = 0;
     int groupID = 0;
     boolean showOrders = false;
-
+    boolean seas = true;
     SharedPreferences prefs = null;
     String globalUsername = null;
     @Override
@@ -155,7 +155,10 @@ public class GroupActivity extends Activity {
     }
 
     private void LeaveGroup() {
-        //TODO: leave Group
+
+        Intent i = new Intent(GroupActivity.this,AddRestaurantActivity.class);
+        startActivity(i);
+
     }
 
     private void intentMethod() {
@@ -175,7 +178,7 @@ public class GroupActivity extends Activity {
 
                 intentProducts = params.getString("MenuProducts");
                 intentPrice = params.getString("MenuPrice");
-                setLists(intentProducts,intentPrice);
+                setLists(intentProducts, intentPrice);
             }
         }
     }
@@ -185,14 +188,15 @@ public class GroupActivity extends Activity {
         if (requestCode==1){
            Bundle params = data.getExtras();
             if (params!=null){
-                prodctmap = (HashMap<String, Integer>) params.get("List");
+                prodctmap = (HashMap<String, Integer>) params.get("order");
                 //TODO: prodctmap hinzufügen zu den bisherigen gruppenbestellungen mit preis, welcher noch ausgerechnet werden muss.
                 String prodPnumbers="";
-                String sum = "";
+                int sum = 0;
+
                 int anzFromHash = prodctmap.size();
                 String[]products = new String[anzFromHash];
                 int anz =0;
-
+                Log.d("Products", String.valueOf(anzFromHash));
                 for(String key : prodctmap.keySet())
                 {
                     products[anz]= key;
@@ -208,10 +212,35 @@ public class GroupActivity extends Activity {
                     {
                         prodPnumbers += products[0] + "-," + prodctmap.get(products);
                     }
+
+                    sum+= prodctmap.get(products[i]);
                 }
-                Log.d("swag",prodPnumbers);
 
+                final String productsandnumbers = prodPnumbers;
+                final int finalsum = sum;
 
+                groupOrder.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.child(String.valueOf(groupID)).exists()&&seas==true)
+                        {
+                            String product = dataSnapshot.child(String.valueOf(groupID)).child("Products+Numbers").getValue().toString().concat("," + productsandnumbers);
+                            int sum = finalsum + Integer.parseInt((String) dataSnapshot.child(String.valueOf(groupID)).child("SumPrice").getValue());
+                            groupOrder.child(String.valueOf(groupID)).child("Products+Numbers").setValue(product);
+                            groupOrder.child(String.valueOf(groupID)).child("SumPrice").setValue(sum);
+
+                        } else {
+                            groupOrder.child(String.valueOf(groupID)).child("Products+Numbers").setValue(productsandnumbers);
+                            groupOrder.child(String.valueOf(groupID)).child("SumPrice").setValue(finalsum);
+                            seas=false;
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+
+                    }
+                });
             }
         }
     }
@@ -295,17 +324,18 @@ public class GroupActivity extends Activity {
         final LinearLayout dialog = (LinearLayout) getLayoutInflater().inflate(R.layout.allproducts, null);
         alert.setView(dialog);
         final ListView order = (ListView) dialog.findViewById(R.id.listViewProducts);
-
         if (showOrders == true) {
             groupOrder.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    String products = (String)dataSnapshot.child(String.valueOf(counterForGroup)).child("Products+Numbers:").getValue();
-                    String sum = dataSnapshot.child(String.valueOf(counterForGroup)).child("SumPrice").getValue().toString();
+                    String products = (String) dataSnapshot.child(String.valueOf(groupID)).child("Products+Numbers").getValue();
+                    String sum = dataSnapshot.child(String.valueOf(groupID)).child("SumPrice").getValue().toString();
 
                     setLists(products, sum);
-
+                    ArrayAdapter<String> groupad = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, itemsToOrder);
+                    order.setAdapter(groupad);
+                    showOrders = false;
                 }
 
                 @Override
@@ -313,20 +343,20 @@ public class GroupActivity extends Activity {
 
                 }
             });
-
-            ArrayAdapter<String> groupad = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, itemsToOrder);
-            order.setAdapter(groupad);
-
+            alert.show();
 
         }
+
+
     }
 
     private void setLists(String products, String sum) {
+
         String[] allProducts = products.split(",");
         for (int k = 0; k < allProducts.length; k++) {
-            itemsToOrder.add(allProducts[k].toString());
+            itemsToOrder.add("Product:" + allProducts[k].toString());
         }
-        itemsToOrder.add(sum);
+        itemsToOrder.add("SUM: " + sum);
         Log.d("seas", products);
         Log.d("seas", sum);
     }
