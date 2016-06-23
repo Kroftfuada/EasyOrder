@@ -36,6 +36,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -68,7 +69,14 @@ public class MapFragmentActivity extends FragmentActivity implements OnMapReadyC
         if (params != null) {
             restaurantname = params.getString("name");
         }
-        radius = "15000";
+
+        if(restaurantname.toLowerCase().equals("mcdonalds") || restaurantname.toLowerCase().equals("mcdonald's") ||
+                restaurantname.toLowerCase().equals("mc donalds") || restaurantname.toLowerCase().equals("mc donald's"))
+        {
+            restaurantname = "McDonald's+Österreich";
+        }
+
+        radius = "40000";
 
 
         //if(checkAndRequestPermissions()){
@@ -96,7 +104,7 @@ public class MapFragmentActivity extends FragmentActivity implements OnMapReadyC
 
 
         url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="
-                + loc.getLatitude() + "," + loc.getLongitude() + "&radius=" + radius + "&types=restaurant" +
+                + loc.getLatitude() + "," + loc.getLongitude() + "&radius=" + radius + "&types=restaurant&name=" + restaurantname +
                 "&key=AIzaSyC1P623gntAIHzT5fTiivCaPLGmfWo14CE";
 
         getPlaces gP = new getPlaces();
@@ -154,13 +162,16 @@ public class MapFragmentActivity extends FragmentActivity implements OnMapReadyC
             MarkerOptions mO = new MarkerOptions();
             LatLng ll;
             for (Place p1 : list) {
-                Log.d("Place", p1.toString());
-                mO.title(p1.getName());
-                mO.snippet(p1.getAddress());
-                ll = new LatLng(p1.getLat(), p1.getLng());
-                mO.position(ll);
-                map.addMarker(mO);
-                Log.d("Filled", "Marker to Map");
+
+                //if(p1.getName().equals(restaurantname)) {
+                    Log.d("Place", p1.toString());
+                    mO.title(p1.getName());
+                    mO.snippet(p1.getAddress());
+                    ll = new LatLng(p1.getLat(), p1.getLng());
+                    mO.position(ll);
+                    map.addMarker(mO);
+                    Log.d("Filled", "Marker to Map");
+                //}
             }
         }
     }
