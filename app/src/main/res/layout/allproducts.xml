@@ -6,5 +6,6 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/listViewProducts" />
+        android:id="@+id/listViewProducts"
+        android:background="#5C5C5C"/>
 </LinearLayout>

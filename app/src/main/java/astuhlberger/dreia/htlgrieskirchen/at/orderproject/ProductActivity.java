@@ -52,6 +52,7 @@ public class ProductActivity extends Activity {
     SharedPreferences prefs = null;
     String globalUsername = null;
     int globalprice = 0;
+    boolean seas = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,20 +150,21 @@ public class ProductActivity extends Activity {
 
     private void setBillsFirebase() {
 
+
         billBase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                int anz = (int) dataSnapshot.child(globalUsername).getChildrenCount();
-                int anztrue = anz + 1;
-
-                billBase.child(globalUsername).child(String.valueOf(anztrue)).child("Restaurant").setValue(restaurantname);
-
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy MMM dd HH:mm:ss");
-                Calendar calendar = new GregorianCalendar(2016,6,22,23,48,50);
-                Date date = calendar.getTime();
-                billBase.child(globalUsername).child(String.valueOf(anztrue)).child("Date").setValue(date);
-                billBase.child(globalUsername).child(String.valueOf(anztrue)).child("Price").setValue(globalprice);
-
+                if(seas) {
+                    int anz = (int) dataSnapshot.child(globalUsername).getChildrenCount();
+                    int anztrue = anz + 1;
+                    billBase.child(globalUsername).child(String.valueOf(anztrue)).child("Restaurant").setValue(restaurantname);
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy MMM dd HH:mm:ss");
+                    Calendar calendar = new GregorianCalendar(2016, 6, 22, 23, 48, 50);
+                    Date date = calendar.getTime();
+                    billBase.child(globalUsername).child(String.valueOf(anztrue)).child("Date").setValue(date.toString());
+                    billBase.child(globalUsername).child(String.valueOf(anztrue)).child("Price").setValue(globalprice);
+                    seas = false;
+                }
 
             }
 

@@ -37,7 +37,8 @@
         android:layout_height="wrap_content"
         android:text="Add"
         android:id="@+id/btn_addUser"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        />
 
     <Button
         android:layout_width="wrap_content"
@@ -45,14 +46,16 @@
         android:text="Stop"
         android:id="@+id/btn_StopOrders"
         android:layout_weight="1"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        />
 
         </LinearLayout>
 
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="265dp"
-        android:id="@+id/listViewGroupActivity" />
+        android:id="@+id/listViewGroupActivity"
+        android:background="#5C5C5C"/>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -64,14 +67,16 @@
             android:layout_height="wrap_content"
             android:text="Add Product"
             android:id="@+id/btn_addProducts"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Show Order"
             android:id="@+id/btn_showOrder"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -84,14 +89,16 @@
             android:layout_height="wrap_content"
             android:text="Show on Map"
             android:id="@+id/btn_showMap"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            />
 
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Leave Group"
             android:id="@+id/btn_leaveGroup"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            />
     </LinearLayout>
 
 

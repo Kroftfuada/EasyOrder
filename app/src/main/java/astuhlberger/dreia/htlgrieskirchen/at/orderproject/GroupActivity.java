@@ -68,6 +68,7 @@ public class GroupActivity extends Activity {
     boolean seas = true;
     SharedPreferences prefs = null;
     String globalUsername = null;
+    ArrayAdapter<String> groupad;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -406,7 +407,7 @@ public class GroupActivity extends Activity {
         final LinearLayout dialog = (LinearLayout) getLayoutInflater().inflate(R.layout.listview_groups, null);
         alert.setView(dialog);
         ListView group = (ListView) dialog.findViewById(R.id.listView_groups);
-        ArrayAdapter<String> groupad = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1,groupid);
+        groupad = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1,groupid);
         group.setAdapter(groupad);
         group.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -427,6 +428,7 @@ public class GroupActivity extends Activity {
                 menurestaurant = (String) dataSnapshot.child(String.valueOf(id)).child("Restaurant").getValue();
                 menuadmin = (String) dataSnapshot.child(String.valueOf(id)).child("Admin").getValue();
                 menumember = (String) dataSnapshot.child(String.valueOf(id)).child("Member").getValue();
+
             }
 
             @Override

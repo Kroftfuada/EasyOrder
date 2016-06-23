@@ -77,10 +77,7 @@ public class BillActivity extends Activity {
 
 
     }
-    @Override
-    public void onBackPressed() {
-        //super.onBackPressed();
-    }
+
     private void fillMenuGroup() {
 
         groupBase.addValueEventListener(new ValueEventListener() {
@@ -137,19 +134,20 @@ public class BillActivity extends Activity {
 
                 if (dataSnapshot.child(globalUsername).exists()){
                     int anz = (int) dataSnapshot.child(globalUsername).getChildrenCount();
+                    Log.d("Bill",String.valueOf(anz));
                     for (int i = 0; i<anz; i++) {
                         String r1 = "";
                         String d1 = "";
                         String p1 = "";
 
                         r1 = (String) dataSnapshot.child(globalUsername).child(String.valueOf((i+1))).child("Restaurant").getValue();
-                        p1 = (String) dataSnapshot.child(globalUsername).child(String.valueOf((i+1))).child("Price").getValue();
+                        p1 = String.valueOf(dataSnapshot.child(globalUsername).child(String.valueOf((i+1))).child("Price").getValue());
                         d1 =  dataSnapshot.child(globalUsername).child(String.valueOf((i+1))).child("Date").getValue().toString();
-                        Log.d("Daten geholt", "Daten geholt");
+                        Log.d("Bill", "Daten geholt");
                         dates.add(d1);
                         restnames.add(r1);
                         prices.add(p1);
-                        Log.d("In Liste", "In Liste");
+                        Log.d("Bill", "In Liste");
                     }
                     ArrayList<String> data = new ArrayList<>();
                     for(int i = 0;i<restnames.size();i++)
