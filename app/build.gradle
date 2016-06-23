@@ -33,5 +33,7 @@ dependencies {
     compile 'com.android.support:design:23.3.0'
     compile 'com.firebase:firebase-client-android:2.5.2+'
     compile files('Libs/picasso-2.5.2.jar')
+    compile 'com.google.android.gms:play-services-maps:8.4.+'
+
 }
 
