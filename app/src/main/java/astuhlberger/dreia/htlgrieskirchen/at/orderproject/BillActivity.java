@@ -2,7 +2,6 @@ package astuhlberger.dreia.htlgrieskirchen.at.orderproject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -24,7 +23,7 @@ import com.firebase.client.ValueEventListener;
 import java.util.ArrayList;
 
 /**
- *  Created by nprechtl on 16.06.2016.
+ * Created by nprechtl on 16.06.2016.
  */
 
 //TODO: Layout anzeigen lassen
@@ -39,7 +38,7 @@ public class BillActivity extends Activity {
     String menuproducts;
     String menuprice;
     int id;
-    ArrayAdapter<String>ad;
+    ArrayAdapter<String> ad;
     Firebase dataBase;
     Firebase groupBase;
     Firebase groupOrder;
@@ -99,8 +98,7 @@ public class BillActivity extends Activity {
                         String members = (String) dataSnapshot.child(String.valueOf((i + 1))).child(globalUsername).getValue();
                         String member[];
 
-                        if(members.contains(","))
-                        {
+                        if (members.contains(",")) {
                             member = members.split(",");
                             int count = member.length;
                             for (int j = 0; j < count; j++) {
@@ -132,17 +130,17 @@ public class BillActivity extends Activity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
 
-                if (dataSnapshot.child(globalUsername).exists()){
+                if (dataSnapshot.child(globalUsername).exists()) {
                     int anz = (int) dataSnapshot.child(globalUsername).getChildrenCount();
-                    Log.d("Bill",String.valueOf(anz));
-                    for (int i = 0; i<anz; i++) {
+                    Log.d("Bill", String.valueOf(anz));
+                    for (int i = 0; i < anz; i++) {
                         String r1 = "";
                         String d1 = "";
                         String p1 = "";
 
-                        r1 = (String) dataSnapshot.child(globalUsername).child(String.valueOf((i+1))).child("Restaurant").getValue();
-                        p1 = String.valueOf(dataSnapshot.child(globalUsername).child(String.valueOf((i+1))).child("Price").getValue());
-                        d1 =  dataSnapshot.child(globalUsername).child(String.valueOf((i+1))).child("Date").getValue().toString();
+                        r1 = (String) dataSnapshot.child(globalUsername).child(String.valueOf((i + 1))).child("Restaurant").getValue();
+                        p1 = String.valueOf(dataSnapshot.child(globalUsername).child(String.valueOf((i + 1))).child("Price").getValue());
+                        d1 = dataSnapshot.child(globalUsername).child(String.valueOf((i + 1))).child("Date").getValue().toString();
                         Log.d("Bill", "Daten geholt");
                         dates.add(d1);
                         restnames.add(r1);
@@ -150,9 +148,8 @@ public class BillActivity extends Activity {
                         Log.d("Bill", "In Liste");
                     }
                     ArrayList<String> data = new ArrayList<>();
-                    for(int i = 0;i<restnames.size();i++)
-                    {
-                        data.add(dates.get(i) + " : " + restnames.get(i)+ " : " +  prices.get(i));
+                    for (int i = 0; i < restnames.size(); i++) {
+                        data.add(dates.get(i) + " : " + restnames.get(i) + " : " + prices.get(i));
                     }
                     ad = new ArrayAdapter<String>(BillActivity.this, android.R.layout.simple_list_item_1, data);
                     billList.setAdapter(ad);
@@ -180,10 +177,12 @@ public class BillActivity extends Activity {
         switch (id) {
             case R.id.action_bills:
                 break;
-            case R.id.action_groups: fillMenuGroup();
+            case R.id.action_groups:
+                fillMenuGroup();
                 showGroups();
                 break;
-            case R.id.action_logout: logout();
+            case R.id.action_logout:
+                logout();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -191,7 +190,7 @@ public class BillActivity extends Activity {
     }
 
     private void logout() {
-        Intent i = new Intent(this,LoginActivity.class);
+        Intent i = new Intent(this, LoginActivity.class);
         startActivity(i);
 
     }
@@ -203,7 +202,7 @@ public class BillActivity extends Activity {
         final LinearLayout dialog = (LinearLayout) getLayoutInflater().inflate(R.layout.listview_groups, null);
         alert.setView(dialog);
         ListView group = (ListView) dialog.findViewById(R.id.listView_groups);
-        ArrayAdapter<String> groupad = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1,groupid);
+        ArrayAdapter<String> groupad = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, groupid);
         group.setAdapter(groupad);
         group.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -218,7 +217,7 @@ public class BillActivity extends Activity {
     private void openGroupActivity(int position) {
         String group = groupid.get(position);
         String[] idString = group.split("-");
-        id =  Integer.parseInt(idString[1]);
+        id = Integer.parseInt(idString[1]);
         groupBase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -245,12 +244,12 @@ public class BillActivity extends Activity {
             }
         });
         Intent i = new Intent(this, GroupActivity.class);
-        i.putExtra("MenuId",id);
-        i.putExtra("MenuRestaurant",menurestaurant);
-        i.putExtra("MenuAdmin",menuadmin);
-        i.putExtra("MenuMember",menumember);
-        i.putExtra("MenuProducts",menuproducts);
-        i.putExtra("MenuPrice",menuprice);
+        i.putExtra("MenuId", id);
+        i.putExtra("MenuRestaurant", menurestaurant);
+        i.putExtra("MenuAdmin", menuadmin);
+        i.putExtra("MenuMember", menumember);
+        i.putExtra("MenuProducts", menuproducts);
+        i.putExtra("MenuPrice", menuprice);
         startActivity(i);
     }
 }

@@ -45,7 +45,7 @@ public class GroupActivity extends Activity {
 
     Firebase groupBase;
 
-    HashMap<String,Integer> prodctmap;
+    HashMap<String, Integer> prodctmap;
     ListView groupList;
     EditText textAddUser;
     Button btnAddUser;
@@ -56,12 +56,12 @@ public class GroupActivity extends Activity {
     Button btnShowOrders;
     String restaurantname;
     EditText usernameToAdd;
-    Firebase dataBaseUsers,dataBaseGroups,groupOrder;
-    ArrayList<String>usersInGroup,itemsToOrder;
+    Firebase dataBaseUsers, dataBaseGroups, groupOrder;
+    ArrayList<String> usersInGroup, itemsToOrder;
     ListView groupUsers;
     ArrayAdapter<String> restaurantAdapter;
     String adminname;
-    int anz,anztrue;
+    int anz, anztrue;
     int counterForGroup = 0;
     int groupID = 0;
     boolean showOrders = false;
@@ -69,6 +69,7 @@ public class GroupActivity extends Activity {
     SharedPreferences prefs = null;
     String globalUsername = null;
     ArrayAdapter<String> groupad;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,20 +93,17 @@ public class GroupActivity extends Activity {
         btnShowMap = (Button) findViewById(R.id.btn_showMap);
         btnLeave = (Button) findViewById(R.id.btn_leaveGroup);
         btnShowOrders = (Button) findViewById(R.id.btn_showOrder);
-        usernameToAdd = (EditText)findViewById(R.id.input_addUser);
+        usernameToAdd = (EditText) findViewById(R.id.input_addUser);
         dataBaseUsers = new Firebase("https://easyorder.firebaseIO.com");
         groupUsers = (ListView) findViewById(R.id.listViewGroupActivity);
         dataBaseGroups = new Firebase("https://easyordergroups.firebaseio.com/");
         groupOrder = new Firebase("https://easyordergrouporder.firebaseio.com");
         Intent intent = getIntent();
         Bundle params = intent.getExtras();
-        if (params!=null){
+        if (params != null) {
             restaurantname = params.getString("name");
             adminname = params.getString("username").toString();
         }
-
-
-
 
 
         btnLeave.setOnClickListener(new View.OnClickListener() {
@@ -139,11 +137,11 @@ public class GroupActivity extends Activity {
 
         btnStopOrders.setOnClickListener(
                 new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                usersToFirebase();
-            }
-        });
+                    @Override
+                    public void onClick(View v) {
+                        usersToFirebase();
+                    }
+                });
 
         btnShowMap.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,7 +155,7 @@ public class GroupActivity extends Activity {
 
     private void LeaveGroup() {
 
-        Intent i = new Intent(GroupActivity.this,AddRestaurantActivity.class);
+        Intent i = new Intent(GroupActivity.this, AddRestaurantActivity.class);
         startActivity(i);
 
     }
@@ -166,7 +164,7 @@ public class GroupActivity extends Activity {
 
         Intent i = getIntent();
         Bundle params = i.getExtras();
-        if (params!=null){
+        if (params != null) {
             if (params.containsKey("MenuAdmin")) {
                 restaurantname = params.getString("MenuRestaurant");
                 counterForGroup = params.getInt("MenuId");
@@ -186,35 +184,30 @@ public class GroupActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode==1){
-           Bundle params = data.getExtras();
-            if (params!=null){
+        if (requestCode == 1) {
+            Bundle params = data.getExtras();
+            if (params != null) {
                 prodctmap = (HashMap<String, Integer>) params.get("order");
                 //TODO: prodctmap hinzufügen zu den bisherigen gruppenbestellungen mit preis, welcher noch ausgerechnet werden muss.
-                String prodPnumbers="";
+                String prodPnumbers = "";
                 int sum = 0;
 
                 int anzFromHash = prodctmap.size();
-                String[]products = new String[anzFromHash];
-                int anz =0;
+                String[] products = new String[anzFromHash];
+                int anz = 0;
                 Log.d("Products", String.valueOf(anzFromHash));
-                for(String key : prodctmap.keySet())
-                {
-                    products[anz]= key;
+                for (String key : prodctmap.keySet()) {
+                    products[anz] = key;
                 }
 
-                for(int i = 0;i<anzFromHash;i++)
-                {
-                    if(i== (anzFromHash-1))
-                    {
+                for (int i = 0; i < anzFromHash; i++) {
+                    if (i == (anzFromHash - 1)) {
                         prodPnumbers += products[0] + "-" + prodctmap.get(products);
-                    }
-                    else
-                    {
+                    } else {
                         prodPnumbers += products[0] + "-," + prodctmap.get(products);
                     }
 
-                    sum+= prodctmap.get(products[i]);
+                    sum += prodctmap.get(products[i]);
                 }
 
                 final String productsandnumbers = prodPnumbers;
@@ -223,8 +216,7 @@ public class GroupActivity extends Activity {
                 groupOrder.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.child(String.valueOf(groupID)).exists()&&seas==true)
-                        {
+                        if (dataSnapshot.child(String.valueOf(groupID)).exists() && seas == true) {
                             String product = dataSnapshot.child(String.valueOf(groupID)).child("Products+Numbers").getValue().toString().concat("," + productsandnumbers);
                             int sum = finalsum + Integer.parseInt((String) dataSnapshot.child(String.valueOf(groupID)).child("SumPrice").getValue());
                             groupOrder.child(String.valueOf(groupID)).child("Products+Numbers").setValue(product);
@@ -233,7 +225,7 @@ public class GroupActivity extends Activity {
                         } else {
                             groupOrder.child(String.valueOf(groupID)).child("Products+Numbers").setValue(productsandnumbers);
                             groupOrder.child(String.valueOf(groupID)).child("SumPrice").setValue(finalsum);
-                            seas=false;
+                            seas = false;
                         }
                     }
 
@@ -246,8 +238,7 @@ public class GroupActivity extends Activity {
         }
     }
 
-    private void usersToFirebase()
-    {
+    private void usersToFirebase() {
 
         dataBaseGroups.addValueEventListener(new ValueEventListener() {
             @Override
@@ -285,14 +276,9 @@ public class GroupActivity extends Activity {
         });
 
 
-
-
-
-
     }
 
-    private void addUserToListView()
-    {
+    private void addUserToListView() {
         dataBaseUsers.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -364,13 +350,13 @@ public class GroupActivity extends Activity {
 
     private void showProductActivity() {
         Intent i = new Intent(this, ProductActivity.class);
-        i.putExtra("name",restaurantname);
+        i.putExtra("name", restaurantname);
         startActivityForResult(i, 1);
     }
 
     private void showMap() {
         Intent i = new Intent(this, MapFragmentActivity.class);
-        i.putExtra("name",restaurantname);
+        i.putExtra("name", restaurantname);
         startActivity(i);
     }
 
@@ -384,12 +370,15 @@ public class GroupActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-            case R.id.action_bills: showBills();
+            case R.id.action_bills:
+                showBills();
                 break;
-            case R.id.action_groups: fillMenuGroup();
+            case R.id.action_groups:
+                fillMenuGroup();
                 showGroups();
                 break;
-            case R.id.action_logout: logout();
+            case R.id.action_logout:
+                logout();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -397,9 +386,10 @@ public class GroupActivity extends Activity {
     }
 
     private void logout() {
-        Intent i = new Intent(this,LoginActivity.class);
+        Intent i = new Intent(this, LoginActivity.class);
         startActivity(i);
     }
+
     private void showGroups() {
 
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -407,7 +397,7 @@ public class GroupActivity extends Activity {
         final LinearLayout dialog = (LinearLayout) getLayoutInflater().inflate(R.layout.listview_groups, null);
         alert.setView(dialog);
         ListView group = (ListView) dialog.findViewById(R.id.listView_groups);
-        groupad = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1,groupid);
+        groupad = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, groupid);
         group.setAdapter(groupad);
         group.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -421,7 +411,7 @@ public class GroupActivity extends Activity {
     private void openGroupActivity(int position) {
         String group = groupid.get(position);
         String[] idString = group.split("-");
-        id =  Integer.parseInt(idString[1]);
+        id = Integer.parseInt(idString[1]);
         groupBase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -449,17 +439,17 @@ public class GroupActivity extends Activity {
             }
         });
         Intent i = new Intent(this, GroupActivity.class);
-        i.putExtra("MenuRestaurant",menurestaurant);
-        i.putExtra("MenuAdmin",menuadmin);
-        i.putExtra("MenuMember",menumember);
-        i.putExtra("MenuProducts",menuproducts);
-        i.putExtra("MenuPrice",menuprice);
-        i.putExtra("MenuId",id);
+        i.putExtra("MenuRestaurant", menurestaurant);
+        i.putExtra("MenuAdmin", menuadmin);
+        i.putExtra("MenuMember", menumember);
+        i.putExtra("MenuProducts", menuproducts);
+        i.putExtra("MenuPrice", menuprice);
+        i.putExtra("MenuId", id);
         startActivity(i);
     }
 
     private void showBills() {
-        Intent i = new Intent(this,BillActivity.class);
+        Intent i = new Intent(this, BillActivity.class);
         startActivity(i);
     }
 
@@ -484,8 +474,7 @@ public class GroupActivity extends Activity {
                         String members = (String) dataSnapshot.child(String.valueOf((i + 1))).child("Member").getValue();
                         String member[];
 
-                        if(members.contains(","))
-                        {
+                        if (members.contains(",")) {
                             member = members.split(",");
                             int count = member.length;
                             for (int j = 0; j < count; j++) {

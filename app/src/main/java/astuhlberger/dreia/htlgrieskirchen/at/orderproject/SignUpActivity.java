@@ -3,7 +3,6 @@ package astuhlberger.dreia.htlgrieskirchen.at.orderproject;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -11,18 +10,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Random;
 
 /**
  * Created by nprechtl on 09.06.2016.
@@ -37,6 +31,7 @@ public class SignUpActivity extends Activity {
     Button btn_signup;
     Firebase dataBase;
     boolean usernameANDemailCheckup = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,8 +59,7 @@ public class SignUpActivity extends Activity {
         });
     }
 
-    public void goToLogin(View view)
-    {
+    public void goToLogin(View view) {
 
         Intent returnIntent = new Intent();
         setResult(Activity.RESULT_OK, returnIntent);
@@ -73,7 +67,7 @@ public class SignUpActivity extends Activity {
 
     }
 
-    public void correctChecks(View view){
+    public void correctChecks(View view) {
         String username = input_name.getText().toString();
         String email = input_email.getText().toString();
         String password = input_password.getText().toString();
@@ -84,12 +78,12 @@ public class SignUpActivity extends Activity {
         allConditionsOkay = checkUsername(username);
         if (allConditionsOkay) {
             allConditionsOkay = checkEmail(email);
-            if (allConditionsOkay){
+            if (allConditionsOkay) {
                 allConditionsOkay = checkPassword(password, verifyPassword);
-                if (allConditionsOkay){
+                if (allConditionsOkay) {
                     allConditionsOkay = checkDatabase(username, email);
-                    if (allConditionsOkay){
-                        if(usernameANDemailCheckup == true) {
+                    if (allConditionsOkay) {
+                        if (usernameANDemailCheckup == true) {
                             signUp(username, email, password);
                         }
                     }
@@ -98,30 +92,29 @@ public class SignUpActivity extends Activity {
         }
     }
 
-    public void signUp(String username,String email,String password)
-    {
+    public void signUp(String username, String email, String password) {
 
-            String pw = md5(password);
-            String verificationCode = random();
-            Firebase referal = dataBase.getRoot();
-            referal.child(username);
-            referal.child(username).child("password").setValue(pw.toString());
-            referal.child(username).child("email").setValue(email);
-            referal.child(username).child("verification").setValue(verificationCode);
-            referal.child(username).child("registered").setValue("false");
+        String pw = md5(password);
+        String verificationCode = random();
+        Firebase referal = dataBase.getRoot();
+        referal.child(username);
+        referal.child(username).child("password").setValue(pw.toString());
+        referal.child(username).child("email").setValue(email);
+        referal.child(username).child("verification").setValue(verificationCode);
+        referal.child(username).child("registered").setValue("false");
 
-            Log.d("Verification", verificationCode + " " + username);
+        Log.d("Verification", verificationCode + " " + username);
 
-            Intent i = new Intent(this,VerificationActivity.class);
-            i.putExtra("VerificationCode",verificationCode);
-            i.putExtra("Username",username);
-            startActivity(i);
+        Intent i = new Intent(this, VerificationActivity.class);
+        i.putExtra("VerificationCode", verificationCode);
+        i.putExtra("Username", username);
+        startActivity(i);
 
     }
 
     public static String random() {
 
-        return String.valueOf(Math.random()*200);
+        return String.valueOf(Math.random() * 200);
     }
 
     public static final String md5(final String s) {
@@ -149,15 +142,15 @@ public class SignUpActivity extends Activity {
         return "";
     }
 
-    public boolean checkUsername(String username){
-        if (username.isEmpty() || username.length()<5 || !username.matches("[A-Za-z0-9_]+")){
+    public boolean checkUsername(String username) {
+        if (username.isEmpty() || username.length() < 5 || !username.matches("[A-Za-z0-9_]+")) {
             input_name.setError("At least 5 characters from A-Z, a-z, 0-9, _");
             return false;
         }
         return true;
     }
 
-    public boolean checkEmail(String email){
+    public boolean checkEmail(String email) {
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             input_email.setError("That is not a correct email-address");
             return false;
@@ -165,14 +158,14 @@ public class SignUpActivity extends Activity {
         return true;
     }
 
-    public boolean checkPassword(String password, String verifyPassword){
-        if (password.isEmpty() || password.length()<5 || !password.matches("[A-Za-z0-9]+")){
+    public boolean checkPassword(String password, String verifyPassword) {
+        if (password.isEmpty() || password.length() < 5 || !password.matches("[A-Za-z0-9]+")) {
 
             input_password.setError("At least 5 characters from A-Z, a-z, 0-9");
             return false;
 
         }
-        if (!password.equals(verifyPassword)){
+        if (!password.equals(verifyPassword)) {
             input_verify_password.setError("Password is not the same");
             return false;
         }
@@ -183,28 +176,21 @@ public class SignUpActivity extends Activity {
 
         dataBase.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot)
-            {
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    String snapShotUsername = dataSnapshot.getValue().toString();
-                    if (snapShotUsername.contains(email)) {
-                        usernameANDemailCheckup = false;
-                        Toast.makeText(getApplicationContext(), "Email already exists.", Toast.LENGTH_SHORT).show();
-                    }
-                    else
-                    {
-                        usernameANDemailCheckup = true;
-                    }
+                String snapShotUsername = dataSnapshot.getValue().toString();
+                if (snapShotUsername.contains(email)) {
+                    usernameANDemailCheckup = false;
+                    Toast.makeText(getApplicationContext(), "Email already exists.", Toast.LENGTH_SHORT).show();
+                } else {
+                    usernameANDemailCheckup = true;
+                }
 
 
-
-                if(dataSnapshot.child(username).exists())
-                {
+                if (dataSnapshot.child(username).exists()) {
                     usernameANDemailCheckup = false;
                     Toast.makeText(getApplicationContext(), "Username already exists.", Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
+                } else {
                     usernameANDemailCheckup = true;
                 }
             }
@@ -216,6 +202,7 @@ public class SignUpActivity extends Activity {
         });
         return true;
     }
+
     @Override
     public void onBackPressed() {
         //super.onBackPressed();

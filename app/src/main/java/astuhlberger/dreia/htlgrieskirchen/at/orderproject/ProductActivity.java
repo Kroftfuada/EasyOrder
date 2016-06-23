@@ -2,12 +2,10 @@ package astuhlberger.dreia.htlgrieskirchen.at.orderproject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -16,10 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.NumberPicker;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
@@ -33,7 +28,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.SimpleTimeZone;
 
 /**
  * Created by Marcus on 16.06.2016.
@@ -46,13 +40,14 @@ public class ProductActivity extends Activity {
     ArrayList<String> productname;
     ArrayList<String> price;
     ArrayList<String> amount;
-    Button order,cancel;
+    Button order, cancel;
     String restaurantname;
-    Firebase items,billBase;
+    Firebase items, billBase;
     SharedPreferences prefs = null;
     String globalUsername = null;
     int globalprice = 0;
     boolean seas = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,8 +57,8 @@ public class ProductActivity extends Activity {
         globalUsername = prefs.getString("username", "");
         Intent i = getIntent();
         Bundle params = i.getExtras();
-        if (params!=null){
-            restaurantname = params.getString("name").replace("s","");
+        if (params != null) {
+            restaurantname = params.getString("name").replace("s", "");
         }
 
         productname = new ArrayList<>();
@@ -105,7 +100,7 @@ public class ProductActivity extends Activity {
             }
         });
 
-        order = (Button)findViewById(R.id.btn_orderProducts);
+        order = (Button) findViewById(R.id.btn_orderProducts);
         order.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,7 +114,7 @@ public class ProductActivity extends Activity {
             }
         });
 
-        cancel = (Button)findViewById(R.id.btn_cancel);
+        cancel = (Button) findViewById(R.id.btn_cancel);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,8 +123,7 @@ public class ProductActivity extends Activity {
         });
     }
 
-    private void pickAmount(final int position)
-    {
+    private void pickAmount(final int position) {
         AlertDialog.Builder alert = new AlertDialog.Builder(ProductActivity.this);
         alert.setTitle("How many do you want?");
         final LinearLayout dialog = (LinearLayout) getLayoutInflater().inflate(R.layout.anzahl, null);
@@ -154,7 +148,7 @@ public class ProductActivity extends Activity {
         billBase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(seas) {
+                if (seas) {
                     int anz = (int) dataSnapshot.child(globalUsername).getChildrenCount();
                     int anztrue = anz + 1;
                     billBase.child(globalUsername).child(String.valueOf(anztrue)).child("Restaurant").setValue(restaurantname);

@@ -14,12 +14,13 @@ import com.firebase.client.Firebase;
 /**
  * Created by nprechtl on 16.06.2016.
  */
-public class VerificationActivity extends Activity{
+public class VerificationActivity extends Activity {
     Firebase dataBase;
     EditText verifycode;
     TextView code;
     Button verify;
-    String verificationCode,username;
+    String verificationCode, username;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,7 +29,7 @@ public class VerificationActivity extends Activity{
 
         verifycode = (EditText) findViewById(R.id.input_verification);
         verify = (Button) findViewById(R.id.btn_verify);
-        code = (TextView)findViewById(R.id.textView_VerificationCode);
+        code = (TextView) findViewById(R.id.textView_VerificationCode);
 
         Intent i = getIntent();
         Bundle params = i.getExtras();
@@ -47,20 +48,19 @@ public class VerificationActivity extends Activity{
         });
     }
 
-    private void checkCode()
-    {
+    private void checkCode() {
 
         Log.d("Verification", verificationCode + " " + username);
 
         Firebase referal = dataBase.getRoot();
         referal.child(username).child("registered").setValue("true");
-        if(verificationCode.equals(verifycode.getText().toString()))
-        {
+        if (verificationCode.equals(verifycode.getText().toString())) {
             Intent i = new Intent(this, AddRestaurantActivity.class);
             startActivity(i);
         }
 
     }
+
     @Override
     public void onBackPressed() {
         //super.onBackPressed();

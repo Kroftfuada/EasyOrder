@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
     String pw;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,46 +42,44 @@ public class MainActivity extends AppCompatActivity {
 
             pw = md5(password);
 
-                dataBase.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.child(username).exists() && dataSnapshot.child(username).child("password").getValue().toString().equals(pw)) {
-                            if(dataSnapshot.child(username).child("registered").getValue().toString().equals("true")) {
-                                Log.d("Eingeloggt", "Erfolgreich eingeloggt");
+            dataBase.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.child(username).exists() && dataSnapshot.child(username).child("password").getValue().toString().equals(pw)) {
+                        if (dataSnapshot.child(username).child("registered").getValue().toString().equals("true")) {
+                            Log.d("Eingeloggt", "Erfolgreich eingeloggt");
 
-                                SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-                                SharedPreferences.Editor editor = SP.edit();
-                                editor.putString("username",username);
-                                editor.commit();
+                            SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                            SharedPreferences.Editor editor = SP.edit();
+                            editor.putString("username", username);
+                            editor.commit();
 
 
-
-                                Intent intent = new Intent(getApplicationContext(), AddRestaurantActivity.class);
-                                intent.putExtra("username",username);
-                                startActivity(intent);
-                            }
-                            else
-                            {
-                                Intent i = new Intent(getApplicationContext(),VerificationActivity.class);
-                                i.putExtra("VerificationCode",dataSnapshot.child(username).child("verification").getValue().toString());
-                                i.putExtra("Username",username);
-                                startActivity(i);
-                            }
+                            Intent intent = new Intent(getApplicationContext(), AddRestaurantActivity.class);
+                            intent.putExtra("username", username);
+                            startActivity(intent);
+                        } else {
+                            Intent i = new Intent(getApplicationContext(), VerificationActivity.class);
+                            i.putExtra("VerificationCode", dataSnapshot.child(username).child("verification").getValue().toString());
+                            i.putExtra("Username", username);
+                            startActivity(i);
                         }
                     }
+                }
 
-                    @Override
-                    public void onCancelled(FirebaseError firebaseError) {
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
 
-                    }
-                });
+                }
+            });
 
-                Firebase ref = dataBase.getRoot();
-                ref.child("LogOn").setValue("seas");
+            Firebase ref = dataBase.getRoot();
+            ref.child("LogOn").setValue("seas");
 
 
         }
     }
+
     @Override
     public void onBackPressed() {
         //super.onBackPressed();

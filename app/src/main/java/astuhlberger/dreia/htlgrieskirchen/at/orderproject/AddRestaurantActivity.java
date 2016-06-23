@@ -16,8 +16,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -29,8 +27,7 @@ import java.util.ArrayList;
 /**
  * Created by nprechtl on 16.06.2016.
  */
-public class AddRestaurantActivity extends Activity
-{
+public class AddRestaurantActivity extends Activity {
 
     Button addRestaurant;
     ArrayList<String> restaurants;
@@ -52,6 +49,7 @@ public class AddRestaurantActivity extends Activity
 
     String username;
     boolean showGroups;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,11 +66,9 @@ public class AddRestaurantActivity extends Activity
         showGroups = false;
         Intent i = getIntent();
         Bundle b = i.getExtras();
-        if(b!=null)
-        {
+        if (b != null) {
             username = b.get("username").toString();
         }
-
 
 
         dataBase.addValueEventListener(new ValueEventListener() {
@@ -100,8 +96,7 @@ public class AddRestaurantActivity extends Activity
 
     }
 
-    private void addDataToRestaurants()
-    {
+    private void addDataToRestaurants() {
         addRestaurant = (Button) findViewById(R.id.btn_newRestaurant);
         addRestaurant.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,7 +113,7 @@ public class AddRestaurantActivity extends Activity
         alert.setView(dialog);
 
         ListView new_restaurant = (ListView) dialog.findViewById(R.id.listView_new_Restaurant);
-        ArrayAdapter<String>restaurantAdapter = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1,restaurants);
+        ArrayAdapter<String> restaurantAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, restaurants);
         new_restaurant.setAdapter(restaurantAdapter);
 
         new_restaurant.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -130,9 +125,9 @@ public class AddRestaurantActivity extends Activity
         alert.show();
     }
 
-    private void showRestaurantDialog(final String restaurantname){
+    private void showRestaurantDialog(final String restaurantname) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Make a new group with: "+restaurantname);
+        builder.setMessage("Make a new group with: " + restaurantname);
         builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -160,12 +155,15 @@ public class AddRestaurantActivity extends Activity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
-            case R.id.action_bills: showBills();
+            case R.id.action_bills:
+                showBills();
                 break;
-            case R.id.action_groups: fillMenuGroup();
+            case R.id.action_groups:
+                fillMenuGroup();
                 showGroups();
                 break;
-            case R.id.action_logout: logout();
+            case R.id.action_logout:
+                logout();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -174,7 +172,7 @@ public class AddRestaurantActivity extends Activity
 
     private void logout() {
 
-        Intent i = new Intent(this,LoginActivity.class);
+        Intent i = new Intent(this, LoginActivity.class);
         startActivity(i);
     }
 
@@ -190,7 +188,7 @@ public class AddRestaurantActivity extends Activity
         final LinearLayout dialog = (LinearLayout) getLayoutInflater().inflate(R.layout.listview_groups, null);
         alert.setView(dialog);
         ListView group = (ListView) dialog.findViewById(R.id.listView_groups);
-        ArrayAdapter<String> groupad = new ArrayAdapter<String>(getApplicationContext(),android.R.layout.simple_list_item_1,groupid);
+        ArrayAdapter<String> groupad = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, groupid);
         group.setAdapter(groupad);
         group.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -204,7 +202,7 @@ public class AddRestaurantActivity extends Activity
     private void openGroupActivity(int position) {
         String group = groupid.get(position);
         String[] idString = group.split("-");
-        id =  Integer.parseInt(idString[1]);
+        id = Integer.parseInt(idString[1]);
         groupBase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -231,23 +229,23 @@ public class AddRestaurantActivity extends Activity
             }
         });
         Intent i = new Intent(this, GroupActivity.class);
-        i.putExtra("MenuRestaurant",menurestaurant);
-        i.putExtra("MenuAdmin",menuadmin);
-        i.putExtra("MenuMember",menumember);
-        i.putExtra("MenuProducts",menuproducts);
-        i.putExtra("MenuId",id);
-        i.putExtra("MenuPrice",menuprice);
+        i.putExtra("MenuRestaurant", menurestaurant);
+        i.putExtra("MenuAdmin", menuadmin);
+        i.putExtra("MenuMember", menumember);
+        i.putExtra("MenuProducts", menuproducts);
+        i.putExtra("MenuId", id);
+        i.putExtra("MenuPrice", menuprice);
         startActivity(i);
     }
 
     private void showBills() {
-        Intent i = new Intent(this,BillActivity.class);
+        Intent i = new Intent(this, BillActivity.class);
         startActivity(i);
     }
 
     private void fillMenuGroup() {
         showGroups = true;
-        if(showGroups == true) {
+        if (showGroups == true) {
             groupBase.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -267,8 +265,7 @@ public class AddRestaurantActivity extends Activity
                             String members = (String) dataSnapshot.child(String.valueOf((i + 1))).child("Member").getValue();
                             String member[];
 
-                            if(members.contains(","))
-                            {
+                            if (members.contains(",")) {
                                 member = members.split(",");
                                 int count = member.length;
                                 for (int j = 0; j < count; j++) {
